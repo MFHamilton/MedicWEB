@@ -1,29 +1,49 @@
-import { Link } from "@heroui/link";
+// src/layouts/DefaultLayout.jsx
+import React from "react";
+import { Link } from "react-router-dom";
+import logo from "../assets/Logo.png";
+import MedicationIcon from "../assets/icon-meds.png";
+import LocalPharmacyIcon from "../assets/icon-proveedores.png";
+import ScienceIcon from "../assets/icon-ensayo-clinic.png";
+import AssignmentIcon from "../assets/icon-inspecciones.png";
+import MonitorHeartIcon from "../assets/icon-monitoreo.png";
 
-import { Navbar } from "@/components/navbar";
-
-export default function DefaultLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function DefaultLayout({ children }) {
   return (
-    <div className="relative flex flex-col h-screen">
-      <Navbar />
-      <main className="container mx-auto max-w-7xl px-6 flex-grow pt-16">
+    <div className="flex min-h-screen">
+      {/* Sidebar */}
+      <aside className="w-[220px] bg-[#f8f8f8] text-gray-800 p-5 shadow-md">
+        {/* Logo */}
+        <div className="mb-10 flex justify-center">
+          <img src={logo} alt="PharmaTech" className="w-36" />
+        </div>
+
+        {/* Menú */}
+        <nav className="space-y-4">
+          <SidebarItem icon={MedicationIcon} text="Medicamentos" to="/medicamentos" />
+          <SidebarItem icon={LocalPharmacyIcon} text="Proveedores" to="/proveedores" />
+          <SidebarItem icon={ScienceIcon} text="Ensayo Clínico" to="/ensayo-clinico" />
+          <SidebarItem icon={AssignmentIcon} text="Inspecciones y Auditorías" to="/inspecciones" />
+          <SidebarItem icon={MonitorHeartIcon} text="Monitoreo" to="/monitoreo" />
+        </nav>
+      </aside>
+
+      {/* Contenido principal */}
+      <main className="flex-1 p-6 bg-[#f0f4f8] overflow-auto">
         {children}
       </main>
-      <footer className="w-full flex items-center justify-center py-3">
-        <Link
-          isExternal
-          className="flex items-center gap-1 text-current"
-          href="https://heroui.com"
-          title="heroui.com homepage"
-        >
-          <span className="text-default-600">Powered by</span>
-          <p className="text-primary">HeroUI</p>
-        </Link>
-      </footer>
     </div>
+  );
+}
+
+function SidebarItem({ icon, text, to = "#" }) {
+  return (
+    <Link
+      to={to}
+      className="flex items-center gap-3 px-2 py-2 rounded-md hover:bg-gray-200 transition-colors"
+    >
+      <img src={icon} alt={text} className="w-5 h-5" />
+      <span className="text-sm font-medium">{text}</span>
+    </Link>
   );
 }
