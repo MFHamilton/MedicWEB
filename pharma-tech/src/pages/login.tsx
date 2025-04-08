@@ -36,8 +36,6 @@ export default function Login() {
 
       console.log("✅ Login exitoso:", user);
       window.location.href = "/";
-      // Redirigir o navegar (si usás React Router)
-      // navigate("/dashboard");
 
     } catch (err) {
       console.error(err);
