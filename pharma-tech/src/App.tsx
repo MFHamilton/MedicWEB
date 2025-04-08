@@ -8,17 +8,24 @@ import AboutPage from "@/pages/about";
 import LoginPage from "@/pages/login";
 import Proveedores from "@/pages/proveedores";
 
+import Meds from "./pages/meds";
+
+
 function App() {
   return (
     <Routes>
+      <Route element={<LoginPage />} path="/login" />
       <Route element={<IndexPage />} path="/" />
+      <Route element={<Meds />} path="/meds" />
       <Route element={<DocsPage />} path="/docs" />
       <Route element={<PricingPage />} path="/pricing" />
       <Route element={<BlogPage />} path="/blog" />
       <Route element={<AboutPage />} path="/about" />
       <Route element={<AboutPage />} path="/about" />
+
       <Route element={<LoginPage />} path="/login" />
       <Route element={<Proveedores />} path="/proveedores" />
+
     </Routes>
   );
 }

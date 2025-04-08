@@ -15,12 +15,14 @@ export default function DefaultLayout({ children }) {
       <aside className="w-[220px] bg-[#f8f8f8] text-gray-800 p-5 shadow-md">
         {/* Logo */}
         <div className="mb-10 flex justify-center">
-          <img src={logo} alt="PharmaTech" className="w-36" />
+          <Link to="/">
+          <img src={logo} alt="PharmaTech" className="w-36"/>
+          </Link>
         </div>
 
         {/* Menú */}
         <nav className="space-y-4">
-          <SidebarItem icon={MedicationIcon} text="Medicamentos" to="/medicamentos" />
+          <SidebarItem icon={MedicationIcon} text="Medicamentos" to="/meds" />
           <SidebarItem icon={LocalPharmacyIcon} text="Proveedores" to="/proveedores" />
           <SidebarItem icon={ScienceIcon} text="Ensayo Clínico" to="/ensayo-clinico" />
           <SidebarItem icon={AssignmentIcon} text="Inspecciones y Auditorías" to="/inspecciones" />
