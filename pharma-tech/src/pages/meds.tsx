@@ -4,6 +4,8 @@ import { Input } from "@heroui/input";
 import { Button } from "@heroui/button";
 import DefaultLayout from "@/layouts/default";
 import DropDownSearch from "@/components/searchSelection";
+import AddIcon from "../assets/add-icon.png";
+import Print from "../assets/print-icon.png";
 
 
 export default function Meds(){
@@ -14,7 +16,7 @@ export default function Meds(){
                 <div className="bg-surface pb-8 m-50px">
                     <div className="flex w-full md:flex-nowrap gap-4">
                         <DropDownSearch/>
-                        <Button className="mt-5 ml-5 mr-5 center hover:bg-indigo-7 00" color="primary">Buscar</Button>
+                        <Button className="mt-5 ml-4 mr-5 self-center hover:bg-indigo-7" radius="sm" color="primary" size="md">Buscar</Button>
                     </div>
 
                     <div className="flex flex-wrap gap-4 full ml-5 mt-4 ">
@@ -139,7 +141,25 @@ export default function Meds(){
                     
                 </div>
 
+
+                <div className=" mt-8">
+                    <div className=" flex flex-wrap bg-surface pb-8 m-50px">
+                        <h1 className="p-8 text-2xl font-bold">Resultados</h1>
+                        <div className="">
+                        <img src={Print} alt="Imprimir" class=" flex flex-wrap w-8 h-8"></img>
+                        <Button className="flex flex-wrap px-4" color="primary" radius="sm"><img src={AddIcon} alt="Agregar"/>Agregar medicamento</Button>
+
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+
+                
+
             </DefaultLayout>
+
+            
         </div>
         
     );
