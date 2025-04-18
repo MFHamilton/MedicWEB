@@ -13,6 +13,9 @@ export default {
     extend: {
       colors: {
         primary : "#03045E",
+        secondary : "#00A8E8",
+        terciary : "#FF6B35",
+        surface: "#FFFFFF",
       },
     },
   },

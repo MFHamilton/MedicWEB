@@ -11,11 +11,10 @@ export default function Meds(){
         <div className="bg-red">
             <DefaultLayout>
                 <h1 className="pb-8 m-20px text-texty text-3xl font-bold" >Medicamentos</h1>
-                <div className="bg-zinc-50 pb-8 m-50px">
+                <div className="bg-surface pb-8 m-50px">
                     <div className="flex w-full md:flex-nowrap gap-4">
                         <DropDownSearch/>
-                        <Input className="mt-5 ml-5" label="Medicamentos" type="meds" />
-                        <Button className="mt-5 ml-5 mr-5 self-center hover:bg-blue-500" color="primary">Buscar</Button>
+                        <Button className="mt-5 ml-5 mr-5 center hover:bg-indigo-7 00" color="primary">Buscar</Button>
                     </div>
 
                     <div className="flex flex-wrap gap-4 full ml-5 mt-4 ">
