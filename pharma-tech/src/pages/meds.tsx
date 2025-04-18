@@ -144,12 +144,16 @@ export default function Meds(){
 
                 <div className=" mt-8">
                     <div className=" flex flex-wrap bg-surface pb-8 m-50px">
-                        <h1 className="p-8 text-2xl font-bold">Resultados</h1>
-                        <div className="">
-                        <img src={Print} alt="Imprimir" class=" flex flex-wrap w-8 h-8"></img>
-                        <Button className="flex flex-wrap px-4" color="primary" radius="sm"><img src={AddIcon} alt="Agregar"/>Agregar medicamento</Button>
-
+                        <h1 className="p-8 mr-10 text-2xl font-bold">Resultados</h1>
+                        <div className="p-1 self-center">
+                            <img src={Print} alt="Imprimir" class=" flex flex-wrap w-8 h-8"></img>
                         </div>
+                        <div className="mr-2 p-5 self-center">
+                            <Button className="" color="primary" radius="sm"><img src={AddIcon} alt="Agregar"/>Agregar medicamento</Button>
+                        </div>
+                        
+
+                       
                         
                     </div>
                     
