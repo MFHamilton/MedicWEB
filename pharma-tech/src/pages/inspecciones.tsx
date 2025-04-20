@@ -3,9 +3,14 @@ import axios from "axios";
 import DefaultLayout from "@/layouts/default";
 import { Input } from "@heroui/input";
 import { Button } from "@heroui/button";
-import { Search, Filter, Plus, Download, Eye, Edit } from "lucide-react";
+import { Eye, Edit, Download, Plus, Filter, Search } from "lucide-react";
 
 export default function Inspecciones() {
+  const [showFilterMenu, setShowFilterMenu] = useState(false);
+const [selectedEntidad, setSelectedEntidad] = useState("Todos");
+const [selectedEstado, setSelectedEstado] = useState("Todos");
+const [filteredInspectores, setFilteredInspectores] = useState([]);
+
   const [inspectores, setInspectores] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState({
@@ -15,72 +20,67 @@ export default function Inspecciones() {
     inspec_estado: true,
   });
 
-  // GET: Obtener inspectores
   useEffect(() => {
-    const fetchInspectores = async () => {
-      try {
-        const response = await axios.get("http://localhost:3000/api/Inspector");
-        setInspectores(response.data);
-      } catch (error) {
-        console.error("Error al obtener inspectores:", error);
-      }
-    };
     fetchInspectores();
   }, []);
 
-  // POST: Añadir nuevo inspector
+  const fetchInspectores = async () => {
+    try {
+      const response = await axios.get("http://localhost:3000/api/Inspector");
+      setInspectores(response.data);
+    } catch (error) {
+      console.error("Error al obtener inspectores:", error);
+    }
+  };
+
   const handleSubmit = async () => {
-  try {
-    await axios.post("http://localhost:3000/api/Inspector", {
-      ...form,
-      id_entidadreguladora: parseInt(form.id_entidadreguladora, 10),
-    });
-
-    // Refetch los inspectores para ver el nuevo
-    const response = await axios.get("http://localhost:3000/api/Inspector");
-    setInspectores(response.data);
-
-    // Cierra el modal y limpia el formulario
-    setForm({
-      inspec_nombre: "",
-      inspec_apellido: "",
-      id_entidadreguladora: "",
-      inspec_estado: true,
-    });
-    setShowModal(false);
-
-  } catch (error) {
-    console.error("Error al crear inspector:", error);
-  }
-};
-
+    try {
+      await axios.post("http://localhost:3000/api/Inspector", {
+        ...form,
+        id_entidadreguladora: parseInt(form.id_entidadreguladora),
+      });
+      setForm({
+        inspec_nombre: "",
+        inspec_apellido: "",
+        id_entidadreguladora: "",
+        inspec_estado: true,
+      });
+      setShowModal(false);
+      fetchInspectores();
+    } catch (error) {
+      console.error("Error al crear inspector:", error);
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
   };
-  
 
   return (
     <DefaultLayout>
       <div className="p-6">
-        <h1 className="text-3xl font-bold mb-6">Inspectores</h1>
+        <h1 className="text-3xl font-bold mb-6">Inspecciones y Auditorías</h1>
 
         {/* Buscador y botones */}
         <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
           <div className="flex gap-2 w-full md:w-auto">
             <Input
-              className="w-72"
+              className="w-72 rounded-md"
               placeholder="Buscar inspector"
               startContent={<Search size={18} />}
             />
-            <Button className="px-3" variant="bordered" color="primary">
-              <Filter size={18} />
+            <Button className="rounded-md px-4" color="primary">
+              <Filter size={18}  color="white" />
             </Button>
           </div>
-          <Button color="primary" className="px-4" onClick={() => setShowModal(true)}>
+          <Button
+            className="rounded-md px-4"
+            color="primary"
+            onClick={() => setShowModal(true)}
+          >
             <Plus size={18} className="mr-2" />
-            Nuevo inspector
+            Añadir Inspector
           </Button>
         </div>
 
@@ -97,38 +97,38 @@ export default function Inspecciones() {
               </tr>
             </thead>
             <tbody>
-              {inspectores.map((inspector: any, idx: number) => (
-                <tr key={idx} className="border-b hover:bg-gray-50">
-                  <td className="px-6 py-4 text-blue-600 font-medium">{inspector.id_inspector}</td>
-                  <td className="px-6 py-4 font-semibold text-gray-800">
-                    {inspector.inspec_nombre} {inspector.inspec_apellido}
-                  </td>
-                  <td className="px-6 py-4 text-gray-600">{inspector.id_entidadreguladora}</td>
-                  <td className="px-6 py-4">
-                    <span
-                      className={`text-xs px-3 py-1 rounded-full font-semibold shadow-sm ${
+              {inspectores.length > 0 ? (
+                inspectores.map((inspector: any, idx: number) => (
+                  <tr key={idx} className="border-b hover:bg-gray-50">
+                    <td className="px-6 py-4">{inspector.id_inspector}</td>
+                    <td className="px-6 py-4">{inspector.inspec_nombre} {inspector.inspec_apellido}</td>
+                    <td className="px-6 py-4">{inspector.id_entidadreguladora}</td>
+                    <td className="px-6 py-4">
+                      <span className={`text-xs px-3 py-1 rounded-full font-semibold shadow-sm ${
                         inspector.inspec_estado
                           ? "bg-green-100 text-green-800"
                           : "bg-red-100 text-red-700"
-                      }`}
-                    >
-                      {inspector.inspec_estado ? "Activo" : "Inactivo"}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex gap-3 text-gray-500">
-                      <Eye size={18} className="cursor-pointer hover:text-blue-600" />
-                      <Edit size={18} className="cursor-pointer hover:text-green-600" />
-                      <Download size={18} className="cursor-pointer hover:text-gray-800" />
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                      }`}>
+                        {inspector.inspec_estado ? "Activo" : "Inactivo"}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex gap-3 text-gray-500">
+                        <Eye size={18} className="cursor-pointer hover:text-blue-600" />
+                        <Edit size={18} className="cursor-pointer hover:text-green-600" />
+                        <Download size={18} className="cursor-pointer hover:text-gray-800" />
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr><td colSpan={5} className="px-6 py-4 text-center text-gray-500">No hay inspectores.</td></tr>
+              )}
             </tbody>
           </table>
         </div>
 
-        {/* Modal de creación */}
+        {/* Modal */}
         {showModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
             <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
@@ -136,35 +136,38 @@ export default function Inspecciones() {
               <div className="space-y-4">
                 <Input
                   name="inspec_nombre"
-                  placeholder="Nombre del Inspector"
+                  placeholder="Nombre"
                   onChange={handleChange}
+                  className="rounded-md"
                 />
                 <Input
                   name="inspec_apellido"
-                  placeholder="Apellido del Inspector"
+                  placeholder="Apellido"
                   onChange={handleChange}
+                  className="rounded-md"
                 />
                 <Input
                   name="id_entidadreguladora"
                   placeholder="ID Entidad Reguladora"
                   onChange={handleChange}
+                  className="rounded-md"
                 />
-              <select
-  name="inspec_estado"
-  onChange={(e) =>
-    setForm({ ...form, inspec_estado: e.target.value === "true" })
-  }
-  className="w-full border p-2 rounded-md"
->
-  <option value="true">Activo</option>
-  <option value="false">Inactivo</option>
-</select>
+                <select
+                  name="inspec_estado"
+                  onChange={(e) =>
+                    setForm({ ...form, inspec_estado: e.target.value === "true" })
+                  }
+                  className="w-full border p-2 rounded-md"
+                >
+                  <option value="true">Activo</option>
+                  <option value="false">Inactivo</option>
+                </select>
 
                 <div className="flex justify-end gap-2 pt-4">
-                  <Button color="danger" variant="flat" onClick={() => setShowModal(false)}>
+                  <Button className="rounded-md" color="danger" variant="flat" onClick={() => setShowModal(false)}>
                     Cancelar
                   </Button>
-                  <Button onClick={handleSubmit}>Guardar
+                  <Button className="rounded-md" onClick={handleSubmit}>
                     Guardar
                   </Button>
                 </div>
