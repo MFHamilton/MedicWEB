@@ -2,6 +2,9 @@ import Filter from "../assets/filter.png";
 import DropdownProveedor from "./proveedor-dropdown";
 import DropdownMedType from "./medsType-dropdown";
 import DropdownEstado from "./estado-dropdown";
+import DropdownControl from "./control-dropdown";
+import DropdownRiesgo from "./riesgo-dropdown";
+
 import React from "react";
 import {
   Modal,
@@ -26,34 +29,39 @@ export default function FilterButton(){
 
   return (
     <>
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-wrap gap-3 ">
         {backdrops.map((b) => (
           <Button
             key={b}
-            className="capitalize "
-            color="warning"
-            variant="flat"
             onPress={() => handleOpen(b)}
+            className="bg- rounded-md p-2 shadow-md"
           >
-            {b}
+            <img src={Filter} alt="Imprimir" className="w-7 h-7"></img>
           </Button>
         ))}
       </div>
-      <Modal backdrop={backdrop} isOpen={isOpen} onClose={onClose}>
-        <ModalContent>
+      <Modal className="rounded-md" backdrop={backdrop} isOpen={isOpen} onClose={onClose}>
+        <ModalContent className="max-h-[90vh]  relative z-0">
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">Filtro</ModalHeader>
-              <ModalBody>
+              <ModalHeader className="flex flex-col gap-1 text-primary font-bold">Filtros</ModalHeader>
+              <ModalBody className="flex flex-col overflow-auto gap-4">
+                <p className="font-bold mb-1">Proveedores</p>
                 <DropdownProveedor/>
+                <p className="font-bold mb-1">Tipo de Medicamento</p>
                 <DropdownMedType/>
+                <p className="font-bold mb-1">Estado</p>
                 <DropdownEstado/>
+                <p className="font-bold mb-1">Control</p>
+                <DropdownControl/>
+                <p className="font-bold mb-1">Riesgo del Medicamento</p>
+                <DropdownRiesgo/>
               </ModalBody>
-              <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
+              <ModalFooter className="mr-4">
+                <Button color="danger" variant="light" onPress={onClose} >
                   Cerrar
                 </Button>
-                <Button color="primary" onPress={onClose}>
+                <Button color="secondary" onPress={onClose}>
                   Aceptar
                 </Button>
               </ModalFooter>

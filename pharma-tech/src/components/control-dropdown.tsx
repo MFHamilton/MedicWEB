@@ -56,7 +56,7 @@ export default function DropdownControl() {
             className="flex items-center justify-between x-96 p-3 border rounded-md cursor-pointer bg-white"
             onClick={() => setIsOpen(!isOpen)}
           >
-            <span>{selectedOption || "Estado"}</span>
+            <span>{selectedOption || "Control"}</span>
             {isOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
           </div>
 

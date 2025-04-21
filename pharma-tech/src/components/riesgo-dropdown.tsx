@@ -59,12 +59,12 @@ export default function DropdownRiesgo() {
             className="flex items-center justify-between x-96 p-3 border rounded-md cursor-pointer bg-white"
             onClick={() => setIsOpen(!isOpen)}
           >
-            <span>{selectedOption || "Estado"}</span>
+            <span>{selectedOption || "Riesgo"}</span>
             {isOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
           </div>
 
           {isOpen && (
-            <div className="absolute bg-white border rounded-sm shadow-lg z-50 w-full max-h-60 overflow-y-auto">
+            <div className="absolute bag-white border rounded-sm shadow-lg z-50 w-full max-h-60 overflow-y-auto">
               <input
                 type="text"
                 className="p-2 border-b w-full"
