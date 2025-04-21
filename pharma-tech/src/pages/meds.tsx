@@ -4,6 +4,8 @@ import { Input } from "@heroui/input";
 import { Button } from "@heroui/button";
 import DefaultLayout from "@/layouts/default";
 import DropDownSearch from "@/components/searchSelection";
+import AddIcon from "../assets/add-icon.png";
+import Print from "../assets/print-icon.png";
 
 
 export default function Meds(){
@@ -11,11 +13,10 @@ export default function Meds(){
         <div className="bg-red">
             <DefaultLayout>
                 <h1 className="pb-8 m-20px text-texty text-3xl font-bold" >Medicamentos</h1>
-                <div className="bg-zinc-50 pb-8 m-50px">
+                <div className="bg-surface pb-8 m-50px">
                     <div className="flex w-full md:flex-nowrap gap-4">
                         <DropDownSearch/>
-                        <Input className="mt-5 ml-5" label="Medicamentos" type="meds" />
-                        <Button className="mt-5 ml-5 mr-5 self-center hover:bg-blue-500" color="primary">Buscar</Button>
+                        
                     </div>
 
                     <div className="flex flex-wrap gap-4 full ml-5 mt-4 ">
@@ -126,20 +127,50 @@ export default function Meds(){
                             </div>
 
                             <div className="flex-1 min-w-[200px]">
-                            <h2 className="mb-2">Entidad Reguladora</h2>
-                            <Input
-                                isReadOnly
-                                className="w-full md:w-auto mr-5"
-                                defaultValue=""
-                                label="Entidad Reguladora"
-                                type="meds"
-                                variant="bordered"
-                            />
+                                <h2 className="mb-2">Entidad Reguladora</h2>
+                                <Input
+                                    isReadOnly
+                                    className="w-full md:w-auto mr-5"
+                                    defaultValue=""
+                                    label="Entidad Reguladora"
+                                    type="meds"
+                                    variant="bordered"
+                                />
                         </div>
+                    </div>
+
+                    <div className="p-5 self-center">
+                                <Button className="" color="primary" radius="sm"><img src={AddIcon} alt="Agregar"/>Agregar</Button>
+                            </div>
+                    
+                </div>
+
+
+                <div className=" mt-8">
+                    <div className=" flex justify-between items-center bg-surface pb-8 px-8">
+                        <h1 className="text-2xl font-bold">Resultados</h1>
+                        <div className="flex items-center gap-4">
+                            <div className="self-center">
+                            <Button isIconOnly aria-label="Imprimir" color="surface" className="rounded-md">
+                                <img src={Print} alt="Imprimir" className="w-8 h-8"></img>
+                            </Button>
+                            
+                            </div>
+                            <div className="p-5 self-center">
+                                <Button className="" color="primary" radius="sm"><img src={AddIcon} alt="Agregar"/>Nuevo medicamento</Button>
+                            </div>
+                                
+                        </div>
+                    
                     </div>
                     
                 </div>
+
+                
+
             </DefaultLayout>
+
+            
         </div>
         
     );

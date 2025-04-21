@@ -2,25 +2,40 @@
 
 import { useState, useRef, useEffect } from "react"
 import { ChevronDown, ChevronUp } from "lucide-react"
-import { Button } from "@heroui/button"
-import FilterButton from "./filter-button"
+import axios from "axios"
 
-
-export default function DropdownMedicamento() {
+export default function DropdownInspector() {
   const [isOpen, setIsOpen] = useState(false)
   const [selectedOption, setSelectedOption] = useState("")
   const [searchTerm, setSearchTerm] = useState("")
+  const [inspectors, setInspectors] = useState<string[]>([])
   const dropdownRef = useRef<HTMLDivElement>(null)
 
-  const options = [
-    "Medicamento Leanne Graham",
-    "Medicamento Ervin Howell",
-    "Medicamento Clementine Bauch",
-    "Medicamento Patricia Lebsack",
-    "Medicamento Chelsey Dietrich",
-  ]
+  useEffect(() => {
+    const fetchInspectors = async () => {
+      try {
+        // Reemplaza esta URL por la real de tu API
+        const response = await axios.get("https://api.example.com/inspectores")
+        // Suponiendo que la API devuelve un array de strings
+        setInspectors(response.data)
+      } catch (error) {
+        console.error("Error al obtener inspectores:", error)
+        // Datos de ejemplo en caso de error o como placeholder
+        setInspectors([
+          "Inspector Leanne Graham",
+          "Inspector Ervin Howell",
+          "Inspector Clementine Bauch",
+          "Inspector Patricia Lebsack",
+        ])
+      }
+    }
 
-  const filteredOptions = options.filter((option) => option.toLowerCase().includes(searchTerm.toLowerCase()))
+    fetchInspectors()
+  }, [])
+
+  const filteredInspectors = inspectors.filter((inspector) =>
+    inspector.toLowerCase().includes(searchTerm.toLowerCase())
+  )
 
   const handleClickOutside = (event: MouseEvent) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -38,44 +53,39 @@ export default function DropdownMedicamento() {
   return (
     <div className="w-xl p-6 bg-white rounded-lg">
       <div className="flex items-center gap-4">
-        {/* Dropdown con z-index alto para aparecer sobre otros elementos */}
         <div className="relative flex-1" ref={dropdownRef}>
           <div
             className="flex items-center justify-between p-3 border rounded-md cursor-pointer bg-white"
             onClick={() => setIsOpen(!isOpen)}
           >
-            <span>{selectedOption || "Medicamento"}</span>
+            <span>{selectedOption || "Inspector"}</span>
             {isOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
           </div>
 
           {isOpen && (
-            <div className="absolute  mt-1 bg-white border rounded-md shadow-lg z-50 max-h-60 overflow-y-auto">
+            <div className="absolute mt-1 bg-white border rounded-md shadow-lg z-50 max-h-60 overflow-y-auto">
               <input
                 type="text"
-                className=" p-2 border-b"
-                placeholder="Buscar medicamento..."
+                className="p-2 border-b w-full"
+                placeholder="Buscar inspector..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
-              {filteredOptions.map((option, index) => (
+              {filteredInspectors.map((inspector, index) => (
                 <div
                   key={index}
                   className="p-3 hover:bg-gray-100 cursor-pointer"
                   onClick={() => {
-                    setSelectedOption(option)
+                    setSelectedOption(inspector)
                     setIsOpen(false)
                   }}
                 >
-                  {option}
+                  {inspector}
                 </div>
               ))}
             </div>
           )}
         </div>
-
-        {/* Botón alineado verticalmente con el dropdown */}
-        <FilterButton/>
-        <Button className="py-3 px-6 hover:bg-indigo-7 rounded-md self-start" color="primary" size="md">Buscar</Button>
       </div>
     </div>
   )
