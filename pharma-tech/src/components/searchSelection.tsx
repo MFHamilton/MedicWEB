@@ -1,109 +1,79 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import axios from "axios"
-import { ChevronDown } from "lucide-react"
-                 
+import { useState, useRef, useEffect } from "react"
+import { ChevronDown, ChevronUp } from "lucide-react"
+import { Button } from "@heroui/button"
 
-interface Medicamento {
-  id: string
-  nombre: string
-}
-
-export default function MedicamentosPage() {
-  const [medicamentos, setMedicamentos] = useState<Medicamento[]>([])
+export default function DropdownMedicamento() {
   const [isOpen, setIsOpen] = useState(false)
-  const [selectedMedicamento, setSelectedMedicamento] = useState<Medicamento | null>(null)
-  const [resultados, setResultados] = useState<Medicamento[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  const [selectedOption, setSelectedOption] = useState("")
+  const [searchTerm, setSearchTerm] = useState("")
+  const dropdownRef = useRef<HTMLDivElement>(null)
+
+  const options = [
+    "Medicamento Leanne Graham",
+    "Medicamento Ervin Howell",
+    "Medicamento Clementine Bauch",
+    "Medicamento Patricia Lebsack",
+    "Medicamento Chelsey Dietrich",
+  ]
+
+  const filteredOptions = options.filter((option) => option.toLowerCase().includes(searchTerm.toLowerCase()))
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      setIsOpen(false)
+    }
+  }
 
   useEffect(() => {
-    const fetchMedicamentos = async () => {
-      try {
-        // Puedes reemplazar esta URL con tu API real
-        const response = await axios.get("https://jsonplaceholder.typicode.com/users")
-        // Transformamos los datos para simular medicamentos
-        const medicamentosData = response.data.map((user: any) => ({
-          id: user.id.toString(),
-          nombre: `Medicamento ${user.name}`,
-        }))
-        setMedicamentos(medicamentosData)
-        setIsLoading(false)
-      } catch (error) {
-        console.error("Error al cargar medicamentos:", error)
-        setIsLoading(false)
-      }
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
     }
-
-    fetchMedicamentos()
   }, [])
 
-  const handleSelect = (medicamento: Medicamento) => {
-    setSelectedMedicamento(medicamento)
-    setIsOpen(false)
-  }
-
-  const handleBuscar = () => {
-    if (selectedMedicamento) {
-      setResultados([selectedMedicamento])
-    }
-  }
-
   return (
-    <div className="max-w-4xl p-5">
-      <div className="flex flex-col md:flex-row gap-1 mb-2">
-        <div className="relative w-full md:w-96">
+    <div className="w-xl p-6 bg-white rounded-lg">
+      <div className="flex items-center gap-4">
+        {/* Dropdown con z-index alto para aparecer sobre otros elementos */}
+        <div className="relative flex-1" ref={dropdownRef}>
           <div
-            className="w-full border border-gray-300 rounded-md p-3 flex justify-between items-center cursor-pointer bg-white"
+            className="flex items-center justify-between p-3 border rounded-md cursor-pointer bg-white"
             onClick={() => setIsOpen(!isOpen)}
           >
-            <span className={selectedMedicamento ? "text-black" : "text-gray-500"}>
-              {selectedMedicamento ? selectedMedicamento.nombre : "Medicamento"}
-            </span>
-            <ChevronDown className="h-5 w-5 text-gray-500" />
+            <span>{selectedOption || "Medicamento"}</span>
+            {isOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
           </div>
 
           {isOpen && (
-            <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto">
-              {isLoading ? (
-                <div className="p-3 text-center text-gray-500">Cargando...</div>
-              ) : (
-                medicamentos.map((med) => (
-                  <div key={med.id} className="p-3 hover:bg-gray-100 cursor-pointer" onClick={() => handleSelect(med)}>
-                    {med.nombre}
-                  </div>
-                ))
-              )}
+            <div className="absolute  mt-1 bg-white border rounded-md shadow-lg z-50 max-h-60 overflow-y-auto">
+              <input
+                type="text"
+                className=" p-2 border-b"
+                placeholder="Buscar medicamento..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              {filteredOptions.map((option, index) => (
+                <div
+                  key={index}
+                  className="p-3 hover:bg-gray-100 cursor-pointer"
+                  onClick={() => {
+                    setSelectedOption(option)
+                    setIsOpen(false)
+                  }}
+                >
+                  {option}
+                </div>
+              ))}
             </div>
           )}
         </div>
 
+        {/* Botón alineado verticalmente con el dropdown */}
+        <Button className="py-3 px-6 hover:bg-indigo-7 rounded-md self-start" color="primary" size="md">Buscar</Button>
       </div>
-
-      {resultados.length > 0 && (
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white">
-            <thead>
-              <tr className="border-b">
-                <th className="text-left py-3 px-4 font-medium text-gray-700">ID del medicamento</th>
-                <th className="text-left py-3 px-4 font-medium text-gray-700">Nombre del medicamento</th>
-                <th className="text-left py-3 px-4 font-medium text-gray-700">Inspección</th>
-              </tr>
-            </thead>
-            <tbody>
-              {resultados.map((med) => (
-                <tr key={med.id} className="border-b hover:bg-gray-50">
-                  <td className="py-3 px-4">{med.id}</td>
-                  <td className="py-3 px-4">{med.nombre}</td>
-                  <td className="py-3 px-4">
-                    
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
     </div>
   )
 }

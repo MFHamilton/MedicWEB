@@ -16,7 +16,6 @@ export default function Meds(){
                 <div className="bg-surface pb-8 m-50px">
                     <div className="flex w-full md:flex-nowrap gap-4">
                         <DropDownSearch/>
-                        <Button className="mt-5 ml-4 mr-5 self-center hover:bg-indigo-7" radius="sm" color="primary" size="md">Buscar</Button>
                     </div>
 
                     <div className="flex flex-wrap gap-4 full ml-5 mt-4 ">
@@ -147,14 +146,16 @@ export default function Meds(){
                         <h1 className="text-2xl font-bold">Resultados</h1>
                         <div className="flex items-center gap-4">
                             <div className="self-center">
+                            <Button isIconOnly aria-label="Imprimir" color="surface" className="rounded-md">
                                 <img src={Print} alt="Imprimir" className="w-8 h-8"></img>
+                            </Button>
+                            
                             </div>
                             <div className="p-5 self-center">
                                 <Button className="" color="primary" radius="sm"><img src={AddIcon} alt="Agregar"/>Agregar medicamento</Button>
                             </div>
                                 
                         </div>
-                        
                         
 
                        
