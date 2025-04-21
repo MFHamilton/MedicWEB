@@ -75,7 +75,10 @@ export default function DropdownMedicamento() {
 
         {/* Botón alineado verticalmente con el dropdown */}
         <FilterButton/>
-        <Button className="py-3 px-6 hover:bg-indigo-7 rounded-md self-start" color="primary" size="md">Buscar</Button>
+        <div className="my-1">
+        <Button className=" px-6 hover:bg-indigo-7 rounded-md self-start shadow-md" color="primary" size="md">Buscar</Button>
+        </div>
+        
       </div>
     </div>
   )

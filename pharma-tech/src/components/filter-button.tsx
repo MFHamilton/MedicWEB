@@ -34,7 +34,7 @@ export default function FilterButton(){
           <Button
             key={b}
             onPress={() => handleOpen(b)}
-            className="bg- rounded-md p-2 shadow-md"
+            className="bg-surface rounded-md p-2 shadow-md"
           >
             <img src={Filter} alt="Imprimir" className="w-7 h-7"></img>
           </Button>
