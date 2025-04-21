@@ -8,6 +8,8 @@ import AboutPage from "@/pages/about";
 import LoginPage from "@/pages/login";
 import Proveedores from "@/pages/proveedores";
 import Inspecciones from './pages/inspecciones';
+import EnsayoClinico from "@/pages/ensayoclinico"; 
+
 
 import Meds from "./pages/meds";
 
@@ -23,7 +25,7 @@ function App() {
       <Route element={<BlogPage />} path="/blog" />
       <Route element={<AboutPage />} path="/about" />
       <Route element={<AboutPage />} path="/about" />
-
+      <Route element={<EnsayoClinico />} path="/ensayoclinico" />
       <Route element={<LoginPage />} path="/login" />
       <Route element={<Proveedores />} path="/proveedores" />
 
