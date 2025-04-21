@@ -140,7 +140,7 @@ export default function Meds(){
                     </div>
 
                     <div className="p-5 self-center">
-                                <Button className="" color="primary" radius="sm"><img src={AddIcon} alt="Agregar"/>Agregar</Button>
+                                <Button className="" color="secondary" radius="sm"><img src={AddIcon} alt="Agregar"/>Agregar</Button>
                             </div>
                     
                 </div>

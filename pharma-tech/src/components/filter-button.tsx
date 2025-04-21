@@ -1,5 +1,7 @@
 import Filter from "../assets/filter.png";
 import DropdownProveedor from "./proveedor-dropdown";
+import DropdownMedType from "./medsType-dropdown";
+import DropdownEstado from "./estado-dropdown";
 import React from "react";
 import {
     Modal,
@@ -26,39 +28,21 @@ export default function FilterButton(){
           <ModalContent>
             {(onClose) => (
               <>
-                <ModalHeader className="flex flex-col gap-1">Filtro</ModalHeader>
-                <ModalBody>
+                <ModalHeader className="flex flex-none gap-1">Filtrar</ModalHeader>
+                <ModalBody className="">
+                    <p className="font-semibold">Proveedores</p>
                     <DropdownProveedor/>
-                  <Input
-                    label="Email"
-                    placeholder="Enter your email"
-                    variant="bordered"
-                  />
-                  <Input
-                    label="Password"
-                    placeholder="Enter your password"
-                    type="password"
-                    variant="bordered"
-                  />
-                  <div className="flex py-2 px-1 justify-between">
-                    <Checkbox
-                      classNames={{
-                        label: "text-small",
-                      }}
-                    >
-                      Remember me
-                    </Checkbox>
-                    <Link color="primary" href="#" size="sm">
-                      Forgot password?
-                    </Link>
-                  </div>
+                    <p className="font-semibold">Tipos de Medicamento</p>
+                    <DropdownMedType/>
+                    <p>Estado</p>
+                    <DropdownEstado/>
                 </ModalBody>
                 <ModalFooter>
                   <Button color="danger" variant="flat" onPress={onClose}>
-                    Close
+                    Cerrar
                   </Button>
-                  <Button color="primary" onPress={onClose}>
-                    Sign in
+                  <Button color="secondary" onPress={onClose}>
+                    Aceptar
                   </Button>
                 </ModalFooter>
               </>
