@@ -1,5 +1,5 @@
 import Filter from "../assets/filter.png";
-import DropdownInspector from "./inspector-dropdown";
+import DropdownInspector from "./proveedor-dropdown";
 import {
     Modal,
     ModalContent,
@@ -18,14 +18,14 @@ export default function FilterButton(){
 
     return (
       <>
-        <Button color="primary" onPress={onOpen}>
-          Open Modal
+        <Button className="bg-surface" onPress={onOpen}>
+            <img src={Filter} alt="Imprimir" className="w-7 h-7"></img>
         </Button>
         <Modal isOpen={isOpen} placement="top-center" onOpenChange={onOpenChange}>
           <ModalContent>
             {(onClose) => (
               <>
-                <ModalHeader className="flex flex-col gap-1">Log in</ModalHeader>
+                <ModalHeader className="flex flex-col gap-1">Filtro</ModalHeader>
                 <ModalBody>
                   <Input
                     label="Email"

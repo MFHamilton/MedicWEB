@@ -151,7 +151,7 @@ export default function Meds(){
                         <h1 className="text-2xl font-bold">Resultados</h1>
                         <div className="flex items-center gap-4">
                             <div className="self-center">
-                            <Button isIconOnly aria-label="Imprimir" color="surface" className="rounded-md">
+                            <Button isIconOnly aria-label="Imprimir" className="bg-surface rounded-md">
                                 <img src={Print} alt="Imprimir" className="w-8 h-8"></img>
                             </Button>
                             

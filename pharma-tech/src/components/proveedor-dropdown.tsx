@@ -8,33 +8,33 @@ export default function DropdownInspector() {
   const [isOpen, setIsOpen] = useState(false)
   const [selectedOption, setSelectedOption] = useState("")
   const [searchTerm, setSearchTerm] = useState("")
-  const [inspectors, setInspectors] = useState<string[]>([])
+  const [proveedores, setProveedor] = useState<string[]>([])
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const fetchInspectors = async () => {
+    const fetchProveedor = async () => {
       try {
         // Reemplaza esta URL por la real de tu API
-        const response = await axios.get("https://api.example.com/inspectores")
+        const response = await axios.get("https://api.example.com/proveedores")
         // Suponiendo que la API devuelve un array de strings
-        setInspectors(response.data)
+        setProveedor(response.data)
       } catch (error) {
-        console.error("Error al obtener inspectores:", error)
+        console.error("Error al obtener proveedor:", error)
         // Datos de ejemplo en caso de error o como placeholder
-        setInspectors([
-          "Inspector Leanne Graham",
-          "Inspector Ervin Howell",
-          "Inspector Clementine Bauch",
-          "Inspector Patricia Lebsack",
+        setProveedor([
+          "Proveedor Leanne Graham",
+          "Proveedor Ervin Howell",
+          "Proveedor Clementine Bauch",
+          "Proveedor Patricia Lebsack",
         ])
       }
     }
 
-    fetchInspectors()
+    fetchProveedor()
   }, [])
 
-  const filteredInspectors = inspectors.filter((inspector) =>
-    inspector.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredProveedor = proveedores.filter((proveedor) =>
+    proveedor.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
   const handleClickOutside = (event: MouseEvent) => {
@@ -58,7 +58,7 @@ export default function DropdownInspector() {
             className="flex items-center justify-between p-3 border rounded-md cursor-pointer bg-white"
             onClick={() => setIsOpen(!isOpen)}
           >
-            <span>{selectedOption || "Inspector"}</span>
+            <span>{selectedOption || "Proveedor"}</span>
             {isOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
           </div>
 
@@ -67,20 +67,20 @@ export default function DropdownInspector() {
               <input
                 type="text"
                 className="p-2 border-b w-full"
-                placeholder="Buscar inspector..."
+                placeholder="Buscar proveedor..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
-              {filteredInspectors.map((inspector, index) => (
+              {filteredProveedor.map((proveedor, index) => (
                 <div
                   key={index}
                   className="p-3 hover:bg-gray-100 cursor-pointer"
                   onClick={() => {
-                    setSelectedOption(inspector)
+                    setSelectedOption(proveedor)
                     setIsOpen(false)
                   }}
                 >
-                  {inspector}
+                  {proveedor}
                 </div>
               ))}
             </div>
