@@ -4,35 +4,35 @@ import { useState, useRef, useEffect } from "react"
 import { ChevronDown, ChevronUp } from "lucide-react"
 import axios from "axios"
 
-export default function DropdownEstado() {
+export default function DropdownControl() {
   const [isOpen, setIsOpen] = useState(false)
   const [selectedOption, setSelectedOption] = useState("")
   const [searchTerm, setSearchTerm] = useState("")
-  const [estados, setEstado] = useState<string[]>([])
+  const [controles, setControl] = useState<string[]>([])
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const fetchEstado = async () => {
+    const fetchControl = async () => {
       try {
         // Reemplaza esta URL por la real de tu API
-        const response = await axios.get("https://api.example.com/estados")
+        const response = await axios.get("https://api.example.com/controles")
         // Suponiendo que la API devuelve un array de strings
-        setEstado(response.data)
+        setControl(response.data)
       } catch (error) {
-        console.error("Error al obtener estado:", error)
+        console.error("Error al obtener control:", error)
         // Datos de ejemplo en caso de error o como placeholder
-        setEstado([
-          "Activo",
-          "Inactivo",
+        setControl([
+          "Controlado",
+          "No Controlado",
         ])
       }
     }
 
-    fetchEstado()
+    fetchControl()
   }, [])
 
-  const filteredEstado = estados.filter((estado) =>
-    estado.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredControl = controles.filter((control) =>
+    control.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
   const handleClickOutside = (event: MouseEvent) => {
@@ -65,20 +65,20 @@ export default function DropdownEstado() {
               <input
                 type="text"
                 className="p-2 border-b w-full"
-                placeholder="Buscar estado..."
+                placeholder="Buscar control..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
-              {filteredEstado.map((estado, index) => (
+              {filteredControl.map((control, index) => (
                 <div
                   key={index}
                   className="p-3 hover:bg-gray-100 cursor-pointer"
                   onClick={() => {
-                    setSelectedOption(estado)
+                    setSelectedOption(control)
                     setIsOpen(false)
                   }}
                 >
-                  {estado}
+                  {control}
                 </div>
               ))}
             </div>

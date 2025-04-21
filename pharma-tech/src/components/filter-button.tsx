@@ -4,51 +4,63 @@ import DropdownMedType from "./medsType-dropdown";
 import DropdownEstado from "./estado-dropdown";
 import React from "react";
 import {
-    Modal,
-    ModalContent,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
-    Button,
-    useDisclosure,
-    Checkbox,
-    Input,
-    Link,
-  } from "@heroui/react";
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+  useDisclosure,
+} from "@heroui/react";
 
 export default function FilterButton(){
-    const {isOpen, onOpen, onOpenChange} = useDisclosure();
+  const {isOpen, onOpen, onClose} = useDisclosure();
+  const [backdrop, setBackdrop] = React.useState("blur");
 
-    return (
-      <>
-        <Button className="bg-surface" onPress={onOpen}>
-            <img src={Filter} alt="Imprimir" className="w-7 h-7"></img>
-        </Button>
-        <Modal isOpen={isOpen} placement="top-center" onOpenChange={onOpenChange}>
-          <ModalContent>
-            {(onClose) => (
-              <>
-                <ModalHeader className="flex flex-none gap-1">Filtrar</ModalHeader>
-                <ModalBody className="">
-                    <p className="font-semibold">Proveedores</p>
-                    <DropdownProveedor/>
-                    <p className="font-semibold">Tipos de Medicamento</p>
-                    <DropdownMedType/>
-                    <p>Estado</p>
-                    <DropdownEstado/>
-                </ModalBody>
-                <ModalFooter>
-                  <Button color="danger" variant="flat" onPress={onClose}>
-                    Cerrar
-                  </Button>
-                  <Button color="secondary" onPress={onClose}>
-                    Aceptar
-                  </Button>
-                </ModalFooter>
-              </>
-            )}
-          </ModalContent>
-        </Modal>
-      </>
-    )
+  const backdrops = ["blur"];
+
+  const handleOpen = (backdrop) => {
+    setBackdrop(backdrop);
+    onOpen();
+  };
+
+  return (
+    <>
+      <div className="flex flex-wrap gap-3">
+        {backdrops.map((b) => (
+          <Button
+            key={b}
+            className="capitalize "
+            color="warning"
+            variant="flat"
+            onPress={() => handleOpen(b)}
+          >
+            {b}
+          </Button>
+        ))}
+      </div>
+      <Modal backdrop={backdrop} isOpen={isOpen} onClose={onClose}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">Filtro</ModalHeader>
+              <ModalBody>
+                <DropdownProveedor/>
+                <DropdownMedType/>
+                <DropdownEstado/>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  Cerrar
+                </Button>
+                <Button color="primary" onPress={onClose}>
+                  Aceptar
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+    </>
+  );
 }
