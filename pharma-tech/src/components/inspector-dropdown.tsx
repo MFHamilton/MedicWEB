@@ -1,99 +1,92 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { Check, ChevronsUpDown } from "lucide-react"
+import { useState, useRef, useEffect } from "react"
+import { ChevronDown, ChevronUp } from "lucide-react"
+import axios from "axios"
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { Skeleton } from "@/components/ui/skeleton"
-
-type Inspector = {
-  id: string
-  nombre: string
-}
-
-interface InspectorDropdownProps {
-  value: string
-  onChange: (value: string) => void
-  className?: string
-}
-
-export function InspectorDropdown({ value, onChange, className }: InspectorDropdownProps) {
-  const [open, setOpen] = useState(false)
-  const [inspectores, setInspectores] = useState<Inspector[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+export default function DropdownInspector() {
+  const [isOpen, setIsOpen] = useState(false)
+  const [selectedOption, setSelectedOption] = useState("")
+  const [searchTerm, setSearchTerm] = useState("")
+  const [inspectors, setInspectors] = useState<string[]>([])
+  const dropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const fetchInspectores = async () => {
+    const fetchInspectors = async () => {
       try {
-        const response = await fetch("/api/inspectores")
-        const data = await response.json()
-        setInspectores(data)
+        // Reemplaza esta URL por la real de tu API
+        const response = await axios.get("https://api.example.com/inspectores")
+        // Suponiendo que la API devuelve un array de strings
+        setInspectors(response.data)
       } catch (error) {
-        console.error("Error al cargar inspectores:", error)
-        // Datos de ejemplo en caso de error
-        setInspectores([
-          { id: "1", nombre: "Juan Pérez" },
-          { id: "2", nombre: "María González" },
-          { id: "3", nombre: "Carlos Rodríguez" },
+        console.error("Error al obtener inspectores:", error)
+        // Datos de ejemplo en caso de error o como placeholder
+        setInspectors([
+          "Inspector Leanne Graham",
+          "Inspector Ervin Howell",
+          "Inspector Clementine Bauch",
+          "Inspector Patricia Lebsack",
         ])
-      } finally {
-        setIsLoading(false)
       }
     }
 
-    fetchInspectores()
+    fetchInspectors()
   }, [])
 
-  const selectedInspector = inspectores.find((inspector) => inspector.id === value)
-  const displayValue = selectedInspector ? selectedInspector.nombre : ""
+  const filteredInspectors = inspectors.filter((inspector) =>
+    inspector.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      setIsOpen(false)
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [])
 
   return (
-    <div className={cn("flex flex-col space-y-1.5", className)}>
-      <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-        Inspector
-      </label>
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <Button variant="outline" role="combobox" aria-expanded={open} className="justify-between">
-            {value ? displayValue : "Seleccionar inspector"}
-            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="p-0 w-[200px]">
-          {isLoading ? (
-            <div className="p-2 space-y-2">
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-full" />
+    <div className="w-xl p-6 bg-white rounded-lg">
+      <div className="flex items-center gap-4">
+        <div className="relative flex-1" ref={dropdownRef}>
+          <div
+            className="flex items-center justify-between p-3 border rounded-md cursor-pointer bg-white"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <span>{selectedOption || "Inspector"}</span>
+            {isOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+          </div>
+
+          {isOpen && (
+            <div className="absolute mt-1 bg-white border rounded-md shadow-lg z-50 max-h-60 overflow-y-auto">
+              <input
+                type="text"
+                className="p-2 border-b w-full"
+                placeholder="Buscar inspector..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              {filteredInspectors.map((inspector, index) => (
+                <div
+                  key={index}
+                  className="p-3 hover:bg-gray-100 cursor-pointer"
+                  onClick={() => {
+                    setSelectedOption(inspector)
+                    setIsOpen(false)
+                  }}
+                >
+                  {inspector}
+                </div>
+              ))}
             </div>
-          ) : (
-            <Command>
-              <CommandInput placeholder="Buscar inspector..." />
-              <CommandList>
-                <CommandEmpty>No se encontraron inspectores.</CommandEmpty>
-                <CommandGroup>
-                  {inspectores.map((inspector) => (
-                    <CommandItem
-                      key={inspector.id}
-                      value={inspector.id}
-                      onSelect={(currentValue : any) => {
-                        onChange(currentValue === value ? "" : currentValue)
-                        setOpen(false)
-                      }}
-                    >
-                      <Check className={cn("mr-2 h-4 w-4", value === inspector.id ? "opacity-100" : "opacity-0")} />
-                      {inspector.nombre}
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              </CommandList>
-            </Command>
           )}
-        </PopoverContent>
-      </Popover>
+        </div>
+      </div>
     </div>
   )
 }

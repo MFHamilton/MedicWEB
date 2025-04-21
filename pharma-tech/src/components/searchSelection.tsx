@@ -3,7 +3,8 @@
 import { useState, useRef, useEffect } from "react"
 import { ChevronDown, ChevronUp } from "lucide-react"
 import { Button } from "@heroui/button"
-import Filter from "../assets/filter.png"
+import FilterButton from "./filter-button"
+
 
 export default function DropdownMedicamento() {
   const [isOpen, setIsOpen] = useState(false)
@@ -73,9 +74,7 @@ export default function DropdownMedicamento() {
         </div>
 
         {/* Botón alineado verticalmente con el dropdown */}
-        <Button isIconOnly aria-label="Filtro" color="surface" className="rounded-md">
-            <img src={Filter} alt="Imprimir" className="w-7 h-7"></img>
-        </Button>
+        <FilterButton/>
         <Button className="py-3 px-6 hover:bg-indigo-7 rounded-md self-start" color="primary" size="md">Buscar</Button>
       </div>
     </div>

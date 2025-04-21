@@ -161,10 +161,7 @@ export default function Meds(){
                             </div>
                                 
                         </div>
-                        
-
-                       
-                        
+                    
                     </div>
                     
                 </div>
