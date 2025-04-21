@@ -1,99 +1,100 @@
-import React, { useState, useEffect } from "react";
-import { Button } from "@heroui/button";
+import React, { useState } from "react";
 import DefaultLayout from "@/layouts/default";
-import axios from "axios";
+import TablaApi from "../components/tablaapi";
+import Createbutton from "@/components/createbuttom";
+import FilterEnsayos from "../components/filter-ensayos";
 
-interface Trial {
-  id: string;
-  lote: string;
-  medication: string;
-  phase: string;
-  population: string;
-  result: string;
-}
+// Columnas de la tabla de Ensayo Clínico
+const columns = [
+  { key: "id_ensayo", label: "ID Ensayo" },
+  { key: "id_med", label: "ID Medicamento" },
+  { key: "ens_fase", label: "Fase" },
+  { key: "ens_poblacion_objetivo", label: "Población Objetivo" },
+  { key: "ens_eficacia_observada", label: "Eficacia Observada (%)" },
+  { key: "ens_estado", label: "Estado" },
+];
 
-export default function ClinicalTrials() {
-  const [trials, setTrials] = useState<Trial[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+export default function EnsayoClinico() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filters, setFilters] = useState({
+    ens_fase: "",
+    ens_estado: "",
+  });
 
-  // Fetch trials data from the API
-  useEffect(() => {
-    axios
-      .get("") // Aqui va la URL de la API donde se sacara la data 
-      .then((response) => {
-        setTrials(response.data); 
-        setLoading(false);
-      })
-      .catch((error) => {
-        setError("Error al obtener los datos de los ensayos clínicos.");
-        setLoading(false);
-      });
-  }, []);
+  const rowsTransformData = (data: any[]) => {
+    return (data || [])
+      .filter((item: any) =>
+        item.ens_poblacion_objetivo?.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+      .filter((item: any) =>
+        (filters.ens_fase ? item.ens_fase === filters.ens_fase : true) &&
+        (filters.ens_estado ? (filters.ens_estado === "Activo" ? item.ens_estado : !item.ens_estado) : true)
+      )
+      .map((item: any, index: number) => ({
+        key: item.id_ensayo?.toString() || index.toString(),
+        id_ensayo: Number(item.id_ensayo),
+        id_med: Number(item.id_med),
+        ens_fase: String(item.ens_fase),
+        ens_poblacion_objetivo: String(item.ens_poblacion_objetivo),
+        ens_eficacia_observada: parseFloat(item.ens_eficacia_observada),
+        ens_estado: item.ens_estado ? "Activo" : "Inactivo",
+      }));
+  };
+
+  const beforeSubmit = (formData: any) => {
+    return {
+      id_med: parseInt(formData.id_med),
+      ens_fase: String(formData.ens_fase),
+      ens_eficacia_observada: parseFloat(formData.ens_eficacia_observada),
+      ens_poblacion_objetivo: String(formData.ens_poblacion_objetivo),
+      ens_estado: formData.ens_estado ? 1 : 0,
+    };
+  };
 
   return (
-    <div className="bg-red">
-      <DefaultLayout>
-        <h1 className="pb-8 m-20px text-texty text-3xl font-bold">
-          Ensayo Clínicos
-        </h1>
+    <DefaultLayout>
+      <h1 className="pb-8 m-20px text-black text-3xl font-bold">Ensayos Clínicos</h1>
 
-        {loading ? (
-          <p>Cargando...</p>
-        ) : error ? (
-          <p>{error}</p>
-        ) : (
-          <div className="bg-zinc-50 pb-8 m-50px">
-            <div className="flex w-full md:flex-nowrap gap-4">
-              <Button className="mt-5 ml-5 mr-5 self-center hover:bg-blue-500" color="primary">
-                Buscar
-              </Button>
-              <Button className="mt-5 ml-5 mr-5 self-center hover:bg-blue-500" color="primary">
-                Nuevo ensayo
-              </Button>
-            </div>
+      <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
+        <div className="flex items-center gap-4">
+          <input
+            type="text"
+            placeholder="Buscar ensayos clínicos"
+            className="border border-gray-300 rounded-md px-4 py-2 w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
 
-            <div className="mt-5">
-              <table className="min-w-full table-auto border-collapse">
-                <thead>
-                  <tr className="bg-gray-100">
-                    <th className="border px-4 py-2">ID</th>
-                    <th className="border px-4 py-2">Lote</th>
-                    <th className="border px-4 py-2">Medicamento</th>
-                    <th className="border px-4 py-2">Fase</th>
-                    <th className="border px-4 py-2">Población</th>
-                    <th className="border px-4 py-2">Resultados</th>
-                    <th className="border px-4 py-2">Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {trials.map((trial, index) => (
-                    <tr key={index}>
-                      <td className="border px-4 py-2">{trial.id}</td>
-                      <td className="border px-4 py-2">{trial.lote}</td>
-                      <td className="border px-4 py-2">{trial.medication}</td>
-                      <td className="border px-4 py-2">{trial.phase}</td>
-                      <td className="border px-4 py-2">{trial.population}</td>
-                      <td className="border px-4 py-2">{trial.result}</td>
-                      <td className="border px-4 py-2">
-                        <Button className="hover:bg-green-500" color="success">
-                          Ver
-                        </Button>
-                        <Button className="hover:bg-yellow-500 ml-2" color="warning">
-                          Editar
-                        </Button>
-                        <Button className="hover:bg-red-500 ml-2" color="danger">
-                          Eliminar
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
-      </DefaultLayout>
-    </div>
+          <FilterEnsayos filters={filters} setFilters={setFilters} />
+        </div>
+
+        <div className="ml-auto">
+          <Createbutton
+            titulo="Nuevo Ensayo Clínico"
+            endpoint="http://localhost:3000/api/EnsayoClinico/:id"
+            beforeSubmit={beforeSubmit}
+            campos={[
+              { name: "id_med", type: "text", placeholder: "ID Medicamento", required: true },
+              {
+                name: "ens_fase",
+                type: "select",
+                placeholder: "Seleccionar Fase",
+                required: true,
+                options: ["Fase I", "Fase II", "Fase III", "Fase IV"],
+              },
+              { name: "ens_eficacia_observada", type: "number", placeholder: "Eficacia Observada (%)", required: true },
+              { name: "ens_poblacion_objetivo", type: "text", placeholder: "Población", required: true },
+              { name: "ens_estado", type: "checkbox", placeholder: "Activo" },
+            ]}
+          />
+        </div>
+      </div>
+
+      <TablaApi
+        endpoint="http://localhost:3000/api/EnsayoClinico"
+        columns={columns}
+        transformData={rowsTransformData}
+      />
+    </DefaultLayout>
   );
 }
