@@ -16,6 +16,7 @@ export default function Meds(){
                 <div className="bg-surface pb-8 m-50px">
                     <div className="flex w-full md:flex-nowrap gap-4">
                         <DropDownSearch/>
+                        
                     </div>
 
                     <div className="flex flex-wrap gap-4 full ml-5 mt-4 ">
@@ -126,17 +127,21 @@ export default function Meds(){
                             </div>
 
                             <div className="flex-1 min-w-[200px]">
-                            <h2 className="mb-2">Entidad Reguladora</h2>
-                            <Input
-                                isReadOnly
-                                className="w-full md:w-auto mr-5"
-                                defaultValue=""
-                                label="Entidad Reguladora"
-                                type="meds"
-                                variant="bordered"
-                            />
+                                <h2 className="mb-2">Entidad Reguladora</h2>
+                                <Input
+                                    isReadOnly
+                                    className="w-full md:w-auto mr-5"
+                                    defaultValue=""
+                                    label="Entidad Reguladora"
+                                    type="meds"
+                                    variant="bordered"
+                                />
                         </div>
                     </div>
+
+                    <div className="p-5 self-center">
+                                <Button className="" color="primary" radius="sm"><img src={AddIcon} alt="Agregar"/>Agregar</Button>
+                            </div>
                     
                 </div>
 
@@ -152,7 +157,7 @@ export default function Meds(){
                             
                             </div>
                             <div className="p-5 self-center">
-                                <Button className="" color="primary" radius="sm"><img src={AddIcon} alt="Agregar"/>Agregar medicamento</Button>
+                                <Button className="" color="primary" radius="sm"><img src={AddIcon} alt="Agregar"/>Nuevo medicamento</Button>
                             </div>
                                 
                         </div>
