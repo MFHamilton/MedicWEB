@@ -29,7 +29,7 @@ import {
         <TableHeader columns={columns}>
           {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
         </TableHeader>
-        <TableBody items={rows} emptyContent={"No hay informacion que desplegar."}>
+        <TableBody items={rows} emptyContent={"No hay información que desplegar."}>
           {(item) => (
             <TableRow key={item.key}>
               {(columnKey) => <TableCell>{getKeyValue(item, columnKey)}</TableCell>}
@@ -39,3 +39,4 @@ import {
       </Table>
     );
   }
+  

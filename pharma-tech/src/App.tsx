@@ -7,6 +7,7 @@ import BlogPage from "@/pages/blog";
 import AboutPage from "@/pages/about";
 import LoginPage from "@/pages/login";
 import Proveedores from "@/pages/proveedores";
+import Inspecciones from './pages/inspecciones';
 
 import Meds from "./pages/meds";
 
@@ -26,6 +27,7 @@ function App() {
       <Route element={<LoginPage />} path="/login" />
       <Route element={<Proveedores />} path="/proveedores" />
 
+      <Route path="/inspecciones" element={<Inspecciones />} />
     </Routes>
   );
 }
