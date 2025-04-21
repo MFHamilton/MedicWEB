@@ -66,7 +66,7 @@ const [filteredInspectores, setFilteredInspectores] = useState([]);
         <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
           <div className="flex gap-2 w-full md:w-auto">
             <Input
-              className="w-72 rounded-md"
+              className=" w-72 rounded-sm"
               placeholder="Buscar inspector"
               startContent={<Search size={18} />}
             />
