@@ -51,7 +51,7 @@ export default function DropdownInspector() {
   }, [])
 
   return (
-    <div className="w-xl p-6 bg-white rounded-lg">
+    <div className="">
       <div className="flex items-center gap-4">
         <div className="relative flex-1" ref={dropdownRef}>
           <div

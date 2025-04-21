@@ -1,5 +1,6 @@
 import Filter from "../assets/filter.png";
-import DropdownInspector from "./proveedor-dropdown";
+import DropdownProveedor from "./proveedor-dropdown";
+import React from "react";
 import {
     Modal,
     ModalContent,
@@ -27,6 +28,7 @@ export default function FilterButton(){
               <>
                 <ModalHeader className="flex flex-col gap-1">Filtro</ModalHeader>
                 <ModalBody>
+                    <DropdownProveedor/>
                   <Input
                     label="Email"
                     placeholder="Enter your email"
