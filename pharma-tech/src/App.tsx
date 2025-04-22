@@ -31,6 +31,8 @@ function App() {
 
       <Route path="/inspecciones" element={<Inspecciones />} />
       <Route path="/monitoreo" element={<Monitoreo />} />
+
+      
     </Routes>
   );
 }
