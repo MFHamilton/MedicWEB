@@ -1,93 +1,128 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
-import { ChevronDown, ChevronUp } from "lucide-react"
+import React, { useState } from "react"
+import AddIcon from "../assets/add-icon.png"
+import DropdownProveedor from "./proveedor-dropdown"
+import DropdownMedType from "./medsType-dropdown"
+import DropdownEstado from "./estado-dropdown"
+import DropdownControl from "./control-dropdown"
+import DropdownRiesgo from "./riesgo-dropdown"
 import axios from "axios"
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerBody,
+  DrawerFooter,
+  Button,
+  useDisclosure,
+  Input,
+  Checkbox,
+} from "@heroui/react"
 
-export default function DropdownRiesgo() {
-  const [isOpen, setIsOpen] = useState(false)
-  const [selectedOption, setSelectedOption] = useState("")
-  const [searchTerm, setSearchTerm] = useState("")
-  const [controles, setControl] = useState<string[]>([])
-  const dropdownRef = useRef<HTMLDivElement>(null)
+export default function NewMedDrawer() {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure()
+  const [backdrop] = useState("blur")
 
-  useEffect(() => {
-    const fetchControl = async () => {
-      try {
-        // Reemplaza esta URL por la real de tu API
-        const response = await axios.get("https://api.example.com/controles")
-        // Suponiendo que la API devuelve un array de strings
-        setControl(response.data)
-      } catch (error) {
-        console.error("Error al obtener control:", error)
-        // Datos de ejemplo en caso de error o como placeholder
-        setControl([
-          "1",
-          "2",
-          "3",
-          "4",
-          "5",
-        ])
-      }
+  // Estados para el formulario
+  const [medNombre, setMedNombre] = useState("")
+  const [medDescripcion, setMedDescripcion] = useState("")
+  const [idProveedor, setIdProveedor] = useState<number | null>(null)
+  const [idTipo, setIdTipo] = useState<number | null>(null)
+  const [medEstado, setMedEstado] = useState<number | null>(null)
+  const [medControlado, setMedControlado] = useState<number | null>(null)
+  const [medRiesgo, setMedRiesgo] = useState<number | null>(null)
+
+  const handleCreate = async (onClose: () => void) => {
+    // Validar campos obligatorios
+    if (!idProveedor || !idTipo || !medNombre || medEstado === null) {
+      alert("Por favor completa los campos obligatorios.")
+      return
     }
-
-    fetchControl()
-  }, [])
-
-  const filteredControl = controles.filter((control) =>
-    control.toLowerCase().includes(searchTerm.toLowerCase())
-  )
-
-  const handleClickOutside = (event: MouseEvent) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-      setIsOpen(false)
+    const payload = {
+      id_proveedor: idProveedor,
+      id_tipo_medicamento: idTipo,
+      med_nombre: medNombre,
+      med_descripcion: medDescripcion,
+      med_nivel_riesgos: medRiesgo,    // corregido: plural
+      med_estado: medEstado,
+      med_controlado: medControlado,
+    }
+    console.log("Enviando create Medicamento:", payload)
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/Medicamento",
+        payload
+      )
+      console.log("Creación exitosa:", response.data)
+      onClose()
+    } catch (error: any) {
+      console.error("Error creando medicamento:", error)
+      alert(error.response?.data || error.message)
     }
   }
 
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-    }
-  }, [])
-
   return (
-    <div className="relative">
-      <div className="flex-none gap-4">
-        <div className="" ref={dropdownRef}>
-          <div
-            className="flex items-center justify-between x-96 p-3 border rounded-md cursor-pointer bg-white"
-            onClick={() => setIsOpen(!isOpen)}
-          >
-            <span className="text-default-600 text-sm">{selectedOption || "Riesgo"}</span>
-            {isOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-          </div>
-
-          {isOpen && (
-            <div className="absolute bag-white border rounded-sm shadow-lg z-50 w-full max-h-60 overflow-y-auto">
-              <input
-                type="text"
-                className="p-2 border-b w-full"
-                placeholder="Buscar control..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              {filteredControl.map((control, index) => (
-                <div
-                  key={index}
-                  className="p-3 hover:bg-gray-100 cursor-pointer"
-                  onClick={() => {
-                    setSelectedOption(control)
-                    setIsOpen(false)
-                  }}
-                >
-                  {control}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+    <>
+      <div className="flex gap-2">
+        <Button
+          className="shadow-md"
+          color="primary"
+          radius="sm"
+          onPress={onOpen}
+        >
+          <img src={AddIcon} alt="Agregar" />
+          Nuevo Medicamento
+        </Button>
       </div>
-    </div>
+      <Drawer backdrop={backdrop} isOpen={isOpen} onOpenChange={onOpenChange}>
+        <DrawerContent>
+          {(onClose) => (
+            <>
+              <DrawerHeader className="flex flex-col gap-1">
+                Medicamento Nuevo
+              </DrawerHeader>
+              <DrawerBody>
+                <Input
+                  label="Nombre del Medicamento"
+                  radius="sm"
+                  variant="bordered"
+                  value={medNombre}
+                  onChange={(e) => setMedNombre(e.target.value)}
+                />
+                <DropdownProveedor onSelect={setIdProveedor} />
+                <DropdownMedType onSelect={setIdTipo} />
+                <Input
+                  label="Descripción del Medicamento"
+                  radius="sm"
+                  variant="bordered"
+                  value={medDescripcion}
+                  onChange={(e) => setMedDescripcion(e.target.value)}
+                />
+                <DropdownEstado onSelect={setMedEstado} />
+                <DropdownControl onSelect={setMedControlado} />
+                <DropdownRiesgo onSelect={setMedRiesgo} />
+                <div className="flex py-2 px-1 justify-between">
+                  <Checkbox classNames={{ label: "text-small" }}>
+                    Opcional
+                  </Checkbox>
+                </div>
+              </DrawerBody>
+              <DrawerFooter>
+                <Button color="danger" variant="flat" onPress={onClose}>
+                  Cerrar
+                </Button>
+                <Button
+                  color="primary"
+                  onPress={() => handleCreate(onClose)}
+                >
+                  Crear
+                </Button>
+              </DrawerFooter>
+            </>
+          )}
+        </DrawerContent>
+      </Drawer>
+    </>
   )
 }
