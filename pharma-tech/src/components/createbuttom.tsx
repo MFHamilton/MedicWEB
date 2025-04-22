@@ -1,6 +1,7 @@
 // components/createbutton.tsx
 import React, { useState } from "react";
 import axios from "axios";
+import AddIcon from "../assets/add-icon.png";
 import {
   Drawer,
   DrawerContent,
@@ -9,6 +10,8 @@ import {
   DrawerFooter,
   Button,
   useDisclosure,
+  Input,
+  Checkbox
 } from "@heroui/react";
 
 interface CampoFormulario {
@@ -29,6 +32,7 @@ interface Props {
 export default function Createbutton({ titulo, campos, endpoint, beforeSubmit }: Props) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [formData, setFormData] = useState<any>({});
+  const [backdrop, setBackdrop] = useState("blur");
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -69,19 +73,29 @@ export default function Createbutton({ titulo, campos, endpoint, beforeSubmit }:
 
   return (
     <>
-      <Button onPress={onOpen} className="mt-5 ml-5 mr-5 self-center hover:bg-blue-500" color="primary">
-        {titulo}
-      </Button>
-
-      <Drawer isOpen={isOpen} onOpenChange={onOpenChange} placement="right">
+      <div className="flex gap-2">
+        <Button
+          className="shadow-md"
+          color="primary"
+          radius="sm"
+          onPress={() => {
+            setBackdrop("blur");
+            onOpen();
+          }}
+        >
+          <img src={AddIcon} alt="Agregar" />
+          {titulo}
+        </Button>
+      </div>
+      <Drawer backdrop={backdrop} isOpen={isOpen} onOpenChange={onOpenChange}>
         <DrawerContent>
           {(onClose) => (
             <>
-              <DrawerHeader className="text-xl font-bold">{titulo}</DrawerHeader>
+              <DrawerHeader className="flex flex-col gap-1 text-xl font-bold">{titulo}</DrawerHeader>
               <DrawerBody>
                 <form onSubmit={handleSubmit} className="space-y-4">
                   {campos.map((campo) => (
-                    <div key={campo.name}>
+                    <div key={campo.name} className="flex flex-col gap-2">
                       {campo.type === "select" ? (
                         <select
                           name={campo.name}
@@ -96,31 +110,33 @@ export default function Createbutton({ titulo, campos, endpoint, beforeSubmit }:
                           ))}
                         </select>
                       ) : campo.type === "checkbox" ? (
-                        <label className="flex items-center">
-                          <input
-                            type="checkbox"
-                            name={campo.name}
-                            checked={formData[campo.name] || false}
-                            onChange={handleChange}
-                            className="mr-2"
-                          />
+                        <Checkbox
+                          isSelected={formData[campo.name] || false}
+                          onChange={(checked) =>
+                            setFormData((prev: any) => ({
+                              ...prev,
+                              [campo.name]: checked
+                            }))
+                          }
+                        >
                           {campo.placeholder}
-                        </label>
+                        </Checkbox>
                       ) : (
-                        <input
+                        <Input
                           type={campo.type}
                           name={campo.name}
-                          placeholder={campo.placeholder}
+                          label={campo.placeholder}
                           value={formData[campo.name] || ""}
                           onChange={handleChange}
                           required={campo.required}
-                          className="w-full border border-gray-300 rounded px-4 py-2"
+                          radius="sm"
+                          variant="bordered"
                         />
                       )}
                     </div>
                   ))}
                   <DrawerFooter className="flex gap-4">
-                    <Button color="danger" variant="light" onPress={onClose}>
+                    <Button color="danger" variant="flat" onPress={onClose}>
                       Cancelar
                     </Button>
                     <Button color="primary" type="submit">

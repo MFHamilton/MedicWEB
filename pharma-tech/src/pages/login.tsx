@@ -31,8 +31,7 @@ export default function Login() {
       const { user, token } = response.data;
 
       // Guardar datos en localStorage
-      localStorage.setItem("user", JSON.stringify(user));
-      localStorage.setItem("token", token);
+      localStorage.setItem('token', token);
 
       console.log("✅ Login exitoso:", user);
       window.location.href = "/";

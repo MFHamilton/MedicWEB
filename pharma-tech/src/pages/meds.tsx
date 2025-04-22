@@ -7,9 +7,44 @@ import DropDownSearch from "@/components/searchSelection";
 import AddIcon from "../assets/add-icon.png";
 import Print from "../assets/print-icon.png";
 import NewMedDrawer from "@/components/AddMedsDrawer";
+import TablaAPI from "@/components/tablaapi";
 
+const columns = [
+    { key: "IdMedicamento",           label: "ID" },
+    { key: "Proveedor",       label: "Proveedor" },
+    { key: "TipoMedicamento",     label: "Tipo" },
+    { key: "Nombre",       label: "Nombre" },
+    { key: "Descripcion",  label: "Descripción" },
+    {
+      key: "Estado",
+      label: "Estado",
+      render: (v: any) => (v ? "Activo" : "Inactivo"),
+    },
+    {
+      key: "Controlado",
+      label: "Controlado",
+      render: (v: any) => (v ? "Sí" : "No"),
+    },
+    { key: "NivelRiesgo", label: "Nivel de Riesgo" },
+  ];
 
 export default function Meds(){
+    const transformData = (data: any[]) => {
+        return (data || []).map((item: any, idx: number) => ({
+          // React necesita un key único por fila:
+          key: item.IdMedicamento?.toString() || idx.toString(),
+          // mantenemos las propiedades originales para que TablaAPI
+          // acceda directamente con columns[i].key
+          IdMedicamento: item.IdMedicamento,
+          Proveedor:       item.Proveedor,
+          TipoMedicamento: item.TipoMedicamento,
+          Nombre:          item.Nombre,
+          Descripción:     item["Descripción"],
+          Estado:          item.Estado,
+          Controlado:      item.Controlado,
+          NivelRiesgo:     item.NivelRiesgo,
+        }));
+      };
     return(
         <div className="bg-red">
             <DefaultLayout>
@@ -144,8 +179,14 @@ export default function Meds(){
                         <Button className="shadow-md" color="secondary" radius="sm"><img src={AddIcon} alt="Agregar"/>Agregar</Button>
                     </div>
                     
-                </div>
-
+                    <div className="mt-4 px-8">
+          <TablaAPI
+            endpoint="http://localhost:3000/api/Meds    "
+            columns={columns}
+            transformData={transformData}
+          />
+        </div>
+      </div>
 
                 <div className=" mt-8">
                     <div className=" flex justify-between items-center bg-surface px-8">
