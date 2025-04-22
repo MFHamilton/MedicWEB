@@ -148,7 +148,7 @@ export default function Meds(){
 
 
                 <div className=" mt-8">
-                    <div className=" flex justify-between items-center bg-surface pb-8 px-8">
+                    <div className=" flex justify-between items-center bg-surface px-8">
                         <h1 className="text-2xl font-bold">Resultados</h1>
                         <div className="flex items-center gap-4">
                             <div className="self-center">
@@ -164,8 +164,26 @@ export default function Meds(){
                             
                                 
                         </div>
-                    
+                        
                     </div>
+                    <div className="overflow-x-auto p-5 rounded-lg shadow-md bg-white">
+                            <table className="w-full p-5text-left text-sm">
+                                <thead className="bg-[#F9FAFB] border-b text-gray-600">
+                                <tr>
+                                    <th className="px-6 py-4">ID Medicamento</th>
+                                    <th className="px-6 py-4">Nombre Medicamento</th>
+                                    <th className="px-6 py-4">Tipo</th>
+                                    <th className="px-6 py-4">Proveedor</th>
+                                    <th className="px-6 py-4">Lote</th>
+                                    <th className="px-6 py-4">Eventos Adversos</th>
+                                    <th className="px-6 py-4">Estado</th>
+                                    <th className="px-6 py-4">Entidad Reguladora</th>
+                                    <th className="px-6 py-4">Inspector</th>
+                                    <th className="px-6 py-4">Editar</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
                     
                 </div>
 
