@@ -24,7 +24,7 @@ export default function DefaultLayout({ children }) {
         <nav className="space-y-4">
           <SidebarItem icon={MedicationIcon} text="Medicamentos" to="/meds" />
           <SidebarItem icon={LocalPharmacyIcon} text="Proveedores" to="/proveedores" />
-          <SidebarItem icon={ScienceIcon} text="Ensayo Clínico" to="/ensayo-clinico" />
+          <SidebarItem icon={ScienceIcon} text="Ensayo Clínico" to="/ensayoclinico" />
           <SidebarItem icon={AssignmentIcon} text="Inspecciones y Auditorías" to="/inspecciones" />
           <SidebarItem icon={MonitorHeartIcon} text="Monitoreo" to="/monitoreo" />
         </nav>

@@ -57,7 +57,7 @@ export default function FilterButton(){
                 <p className="font-bold mb-1">Riesgo del Medicamento</p>
                 <DropdownRiesgo/>
               </ModalBody>
-              <ModalFooter className="mr-4">
+              <ModalFooter className="">
                 <Button color="danger" variant="light" onPress={onClose} >
                   Cerrar
                 </Button>

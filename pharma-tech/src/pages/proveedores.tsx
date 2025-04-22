@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import DefaultLayout from "@/layouts/default";
 import TablaApi from "../components/tablaapi";
+import { Input } from "@heroui/input";
+import { Search } from "lucide-react";
 
 // Columnas de la tabla
 const columns = [
@@ -12,6 +14,9 @@ const columns = [
 
 export default function Proveedores() {
   const [searchTerm, setSearchTerm] = useState("");
+  const variants = ["faded"]
+  const colors = ["primary"]
+  const radius = [ "sm"];
 
   const rowsTransformData = (data: any[]) => {
     return data
@@ -33,13 +38,27 @@ export default function Proveedores() {
       {/* Encabezado con búsqueda y botón */}
       <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
         {/* Input de búsqueda */}
-        <input
-          type="text"
-          placeholder="Buscar proveedor"
-          className="border border-gray-300 rounded-md px-4 py-2 w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
+        <div className="rounded-md w-80 flex flex-col gap-4 ">
+          {variants.map((variant) => 
+            colors.map((color) => 
+              radius.map((r) => (
+                <div key={`${variant}-${color}-${r}`}>
+                  <Input 
+                    label={"Buscar proveedores"} 
+                    type="email" 
+                    variant={variant} 
+                    color={color} 
+                    radius={r}
+                    startContent={<Search size={18}/>}
+                    />
+                </div>
+              
+              ))
+            )
+          )}
+        </div>
+        
+        
 
         {/* Botón nuevo proveedor */}
         <button

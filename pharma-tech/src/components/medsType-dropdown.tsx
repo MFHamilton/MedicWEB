@@ -49,14 +49,14 @@ export default function DropdownMedType() {
   }, [])
 
   return (
-    <div className="w-96 relative">
+    <div className="relative">
       <div className="flex-none gap-4">
         <div className="" ref={dropdownRef}>
           <div
             className="flex items-center justify-between x-96 p-3 border rounded-md cursor-pointer bg-white"
             onClick={() => setIsOpen(!isOpen)}
           >
-            <span>{selectedOption || "Tipo de Medicamento"}</span>
+            <span className="text-default-600 text-sm">{selectedOption || "Tipo de Medicamento"}</span>
             {isOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
           </div>
 
