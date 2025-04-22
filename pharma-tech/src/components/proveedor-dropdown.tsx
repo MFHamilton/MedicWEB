@@ -12,26 +12,26 @@ export default function DropdownProveedor() {
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    // Fetch providers whenever the search term changes or dropdown opens
+    if (!isOpen) return
+
     const fetchProveedor = async () => {
       try {
-        // Reemplaza esta URL por la real de tu API
-        const response = await axios.get("https://api.example.com/proveedores")
-        // Suponiendo que la API devuelve un array de strings
-        setProveedor(response.data)
+        const response = await axios.get("http://localhost:3000/api/Provd", {
+          params: { pro_nombre: searchTerm }
+        })
+        // Map API objects to array of provider names
+        setProveedor(
+          (response.data || []).map((p: any) => String(p.pro_nombre))
+        )
       } catch (error) {
         console.error("Error al obtener proveedor:", error)
-        // Datos de ejemplo en caso de error o como placeholder
-        setProveedor([
-          "Proveedor Leanne Graham",
-          "Proveedor Ervin Howell",
-          "Proveedor Clementine Bauch",
-          "Proveedor Patricia Lebsack",
-        ])
+        setProveedor([])
       }
     }
 
     fetchProveedor()
-  }, [])
+  }, [isOpen, searchTerm])
 
   const filteredProveedor = proveedores.filter((proveedor) =>
     proveedor.toLowerCase().includes(searchTerm.toLowerCase())
