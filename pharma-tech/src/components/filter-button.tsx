@@ -1,11 +1,12 @@
-import Filter from "../assets/filter.png";
+// components/FilterButton.tsx
+
+import React, { useState } from "react";
+import FilterIcon from "../assets/filter.png";
 import DropdownProveedor from "./proveedor-dropdown";
 import DropdownMedType from "./medsType-dropdown";
 import DropdownEstado from "./estado-dropdown";
 import DropdownControl from "./control-dropdown";
 import DropdownRiesgo from "./riesgo-dropdown";
-
-import React from "react";
 import {
   Modal,
   ModalContent,
@@ -16,52 +17,91 @@ import {
   useDisclosure,
 } from "@heroui/react";
 
-export default function FilterButton(){
-  const {isOpen, onOpen, onClose} = useDisclosure();
-  const [backdrop, setBackdrop] = React.useState("blur");
+export type Filters = {
+  proveedorId?: number;
+  tipoId?: number;
+  estadoId?: number;
+  controlId?: number;
+  riesgoId?: number;
+};
 
-  const backdrops = ["blur"];
+export interface FilterButtonProps {
+  /**
+   * Se invoca cuando el usuario pulsa “Aceptar” en el modal,
+   * con los IDs seleccionados de cada dropdown.
+   */
+  onApply: (filters: Filters) => void;
+}
 
-  const handleOpen = (backdrop) => {
-    setBackdrop(backdrop);
-    onOpen();
+export default function FilterButton({ onApply }: FilterButtonProps) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [backdrop] = useState<"blur">("blur");
+
+  // estados internos para cada filtro
+  const [proveedorId, setProveedorId] = useState<number | null>(null);
+  const [tipoId, setTipoId] = useState<number | null>(null);
+  const [estadoId, setEstadoId] = useState<number | null>(null);
+  const [controlId, setControlId] = useState<number | null>(null);
+  const [riesgoId, setRiesgoId] = useState<number | null>(null);
+
+  const handleApply = () => {
+    onApply({
+      proveedorId: proveedorId ?? undefined,
+      tipoId:      tipoId      ?? undefined,
+      estadoId:    estadoId    ?? undefined,
+      controlId:   controlId   ?? undefined,
+      riesgoId:    riesgoId    ?? undefined,
+    });
+    onClose();
   };
 
   return (
     <>
-      <div className="flex flex-wrap gap-3 ">
-        {backdrops.map((b) => (
-          <Button
-            key={b}
-            onPress={() => handleOpen(b)}
-            className="bg-surface rounded-md p-2 shadow-md"
-          >
-            <img src={Filter} alt="Imprimir" className="w-7 h-7"></img>
-          </Button>
-        ))}
-      </div>
-      <Modal className="rounded-md" backdrop={backdrop} isOpen={isOpen} onClose={onClose}>
-        <ModalContent className="max-h-[90vh]  relative z-0">
-          {(onClose) => (
+      <Button
+        onPress={onOpen}
+        className="bg-surface rounded-md p-2 shadow-md"
+      >
+        <img src={FilterIcon} alt="Filtros" className="w-7 h-7" />
+      </Button>
+
+      <Modal backdrop={backdrop} isOpen={isOpen} onClose={onClose}>
+        <ModalContent className="max-h-[90vh]">
+          {(onCloseInner) => (
             <>
-              <ModalHeader className="flex flex-col gap-1 text-primary font-bold">Filtros</ModalHeader>
-              <ModalBody className="flex flex-col overflow-auto gap-4">
-                <p className="font-bold mb-1">Proveedores</p>
-                <DropdownProveedor/>
-                <p className="font-bold mb-1">Tipo de Medicamento</p>
-                <DropdownMedType/>
-                <p className="font-bold mb-1">Estado</p>
-                <DropdownEstado/>
-                <p className="font-bold mb-1">Control</p>
-                <DropdownControl/>
-                <p className="font-bold mb-1">Riesgo del Medicamento</p>
-                <DropdownRiesgo/>
+              <ModalHeader className="font-bold text-primary">
+                Filtros
+              </ModalHeader>
+              <ModalBody className="flex flex-col gap-4 overflow-auto">
+                <div>
+                  <p className="font-bold mb-1">Proveedor</p>
+                  <DropdownProveedor onSelect={setProveedorId} />
+                </div>
+
+                <div>
+                  <p className="font-bold mb-1">Tipo de Medicamento</p>
+                  <DropdownMedType onSelect={setTipoId} />
+                </div>
+
+                <div>
+                  <p className="font-bold mb-1">Estado</p>
+                  <DropdownEstado onSelect={setEstadoId} />
+                </div>
+
+                <div>
+                  <p className="font-bold mb-1">Controlado</p>
+                  <DropdownControl onSelect={setControlId} />
+                </div>
+
+                <div>
+                  <p className="font-bold mb-1">Riesgo</p>
+                  <DropdownRiesgo onSelect={setRiesgoId} />
+                </div>
               </ModalBody>
-              <ModalFooter className="">
-                <Button color="danger" variant="light" onPress={onClose} >
+              <ModalFooter className="flex justify-end gap-2">
+                <Button color="danger" variant="light" onPress={onCloseInner}>
                   Cerrar
                 </Button>
-                <Button color="secondary" onPress={onClose}>
+                <Button color="secondary" onPress={handleApply}>
                   Aceptar
                 </Button>
               </ModalFooter>
