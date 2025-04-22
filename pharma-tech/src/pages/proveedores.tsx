@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import DefaultLayout from "@/layouts/default";
 import TablaApi from "../components/tablaapi";
 import { Input } from "@heroui/input";
+import { Search } from "lucide-react";
 
 // Columnas de la tabla
 const columns = [
@@ -13,8 +14,8 @@ const columns = [
 
 export default function Proveedores() {
   const [searchTerm, setSearchTerm] = useState("");
-  const variants = ["surface"]
-  const colors = ["#FFFFF"]
+  const variants = ["faded"]
+  const colors = ["primary"]
   const radius = [ "sm"];
 
   const rowsTransformData = (data: any[]) => {
@@ -42,7 +43,14 @@ export default function Proveedores() {
             colors.map((color) => 
               radius.map((r) => (
                 <div key={`${variant}-${color}-${r}`}>
-                  <Input label={"Buscar proveedores"} type="email" variant={variant} color={color} radius={r}/>
+                  <Input 
+                    label={"Buscar proveedores"} 
+                    type="email" 
+                    variant={variant} 
+                    color={color} 
+                    radius={r}
+                    startContent={<Search size={18}/>}
+                    />
                 </div>
               
               ))
