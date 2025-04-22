@@ -141,7 +141,7 @@ export default function Inspecciones() {
                   <td className="px-6 py-4">
                     <div className="flex gap-3 text-gray-500">
                       <Printer size={18} className="cursor-pointer hover:text-indigo-600" />
-                      <Edit size={18} className="cursor-pointer hover:text-green-600" />
+                      <Edit size={19} className="cursor-pointer hover:text-green-600" />
                     </div>
                   </td>
                 </tr>
