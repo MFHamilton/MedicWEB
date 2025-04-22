@@ -7,11 +7,12 @@ import BlogPage from "@/pages/blog";
 import AboutPage from "@/pages/about";
 import LoginPage from "@/pages/login";
 import Proveedores from "@/pages/proveedores";
-import Inspecciones from './pages/inspecciones';
+
 import EnsayoClinico from './pages/ensayoclinico';
 import ProtectedRoute from "@/protectedroute";
 import HomePage from "./pages/homepage";
 import Meds from "./pages/meds";
+import Monitoreo from "./pages/monitoreo";
 
 
 export default function App() {
@@ -30,7 +31,8 @@ export default function App() {
         <Route path="/about"         element={<AboutPage />} />
         <Route path="/ensayoclinico" element={<EnsayoClinico />} />
         <Route path="/proveedores"   element={<Proveedores />} />
-        <Route path="/inspecciones"  element={<Inspecciones />} />
+
+        <Route path="/monitoreo"     element={<Monitoreo />} />
       </Route>
     </Routes>
   )
