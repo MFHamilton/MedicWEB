@@ -10,7 +10,7 @@ const columns = [
   { key: "pro_nombre", label: "Proveedor" },
   { key: "pro_ubicacion", label: "Ubicación" },
   { key: "pro_historial", label: "Historial" },
-  { key: "proveedor_estado", label: "Estado" },
+  { key: "Estado", label: "Estado" },
 ];
 
 export default function Proveedores() {
@@ -29,7 +29,7 @@ export default function Proveedores() {
         pro_nombre: item.pro_nombre,
         pro_ubicacion: item.pro_ubicacion,
         pro_historial: item.pro_historial,
-        proveedor_estado: item.proveedor_estado,
+        Estado: item.Estado,
       }));
   };
 

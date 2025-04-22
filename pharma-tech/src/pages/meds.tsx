@@ -53,7 +53,7 @@ export default function Meds(){
                     <div className="flex w-full md:flex-nowrap gap-4">
                         <DropDownSearch/>
                         
-                    </div>
+                    </div>  
 
                     <div className="flex flex-wrap gap-4 mx-5 mt-4">
                             <div className="flex-1 min-w-[200px]">
