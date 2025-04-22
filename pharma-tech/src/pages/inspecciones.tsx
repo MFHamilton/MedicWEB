@@ -4,13 +4,12 @@ import DefaultLayout from "@/layouts/default";
 import { Input } from "@heroui/input";
 import { Button } from "@heroui/button";
 import { Eye, Edit, Download, Plus, Filter, Search } from "lucide-react";
+import FilterButtonInspecciones from "@/components/filter-inspecciones";
+import DropdownEntidadReguladora from "@/components/InspectorEntidadReguladora-dropdown"
+import DropdownEstadoInspector from "@/components/estado-Inspector-filtro"
 
 export default function Inspecciones() {
-  const [showFilterMenu, setShowFilterMenu] = useState(false);
-const [selectedEntidad, setSelectedEntidad] = useState("Todos");
-const [selectedEstado, setSelectedEstado] = useState("Todos");
-const [filteredInspectores, setFilteredInspectores] = useState([]);
-
+ 
   const [inspectores, setInspectores] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState({
@@ -70,9 +69,8 @@ const [filteredInspectores, setFilteredInspectores] = useState([]);
               placeholder="Buscar inspector"
               startContent={<Search size={18} />}
             />
-            <Button className="rounded-md px-4" color="primary">
-              <Filter size={18}  color="white" />
-            </Button>
+           <FilterButtonInspecciones />
+
           </div>
           <Button
             className="rounded-md px-4"
