@@ -10,7 +10,7 @@ import Proveedores from "@/pages/proveedores";
 import Inspecciones from './pages/inspecciones';
 import EnsayoClinico from './pages/ensayoclinico';
 import ProtectedRoute from "@/protectedroute";
-
+import HomePage from "./pages/homepage";
 import Meds from "./pages/meds";
 
 
@@ -18,11 +18,11 @@ export default function App() {
   return (
     <Routes>
       {/* pública */}
-      <Route path="/login" element={<LoginPage />} />
+      <Route path="/" element={<LoginPage />} />
 
       {/* protegidas */}
       <Route element={<ProtectedRoute />}>
-        <Route path="/"              element={<IndexPage />} />
+        <Route path="/homepage"              element={<HomePage />} />
         <Route path="/meds"          element={<Meds />} />
         <Route path="/docs"          element={<DocsPage />} />
         <Route path="/pricing"       element={<PricingPage />} />
@@ -34,7 +34,7 @@ export default function App() {
       </Route>
 
       {/* fallback */}
-      <Route path="*" element={<Navigate to="/login" replace />} />
+      
     </Routes>
   )
 }
