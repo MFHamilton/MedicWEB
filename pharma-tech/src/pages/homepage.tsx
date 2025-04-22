@@ -20,8 +20,20 @@ export default function HomePage() {
   const [medIndex, setMedIndex] = useState(0);
   const [provIndex, setProvIndex] = useState(0);
   const [inspIndex, setInspIndex] = useState(0);
-  const [medicamentos, setMedicamentos] = useState([]);
-  const [proveedores, setProveedores] = useState([]);
+  interface Medicamento {
+    med_nombre: string;
+    tipom_nombre: string;
+    pro_nombre: string;
+  }
+
+  const [medicamentos, setMedicamentos] = useState<Medicamento[]>([]);
+  interface Proveedor {
+    pro_ubicacion: string;
+    pro_historial: string;
+    pro_estado: number;
+  }
+
+  const [proveedores, setProveedores] = useState<Proveedor[]>([]);
   const [inspecciones, setInspecciones] = useState([]);
   const COLORS = ["#0ea5e9", "#1d4ed8"];
 
