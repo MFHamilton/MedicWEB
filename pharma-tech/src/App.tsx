@@ -32,9 +32,7 @@ export default function App() {
         <Route path="/proveedores"   element={<Proveedores />} />
         <Route path="/inspecciones"  element={<Inspecciones />} />
       </Route>
-
-      {/* fallback */}
-      
+       <Route path="/monitoreo" element={<Monitoreo />} /> 
     </Routes>
   )
 }
