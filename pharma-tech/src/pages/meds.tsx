@@ -15,6 +15,7 @@ interface Medicamento {
   Descripcion: string;
   Estado: boolean;
   Controlado: boolean;
+  NivelRiesgo: string;  // <-- añadido
 }
 
 export default function Meds() {
@@ -24,7 +25,7 @@ export default function Meds() {
   const handleAdd = () => {
     if (selectedMed) {
       setRows(prev => [...prev, selectedMed]);
-      setSelectedMed(null); // opcional: limpiar selección tras agregar
+      setSelectedMed(null);
     }
   };
 
@@ -36,12 +37,11 @@ export default function Meds() {
         </h1>
 
         <div className="bg-surface pb-8 m-50px">
-          {/* 1) Dropdown con callback */}
+          {/* Dropdown + detalle */}
           <div className="flex w-full md:flex-nowrap gap-4">
             <DropDownSearch onSearch={setSelectedMed} />
           </div>
 
-          {/* Inputs controlados */}
           <div className="flex flex-wrap gap-4 mx-5 mt-4">
             {/* Fila 1 */}
             <div className="flex-1 min-w-[200px]">
@@ -103,10 +103,10 @@ export default function Meds() {
                 className="w-full"
                 label="Controlado"
                 value={
-                  selectedMed?.Controlado
-                    ? "Sí"
-                    : selectedMed === null
+                  selectedMed == null
                     ? ""
+                    : selectedMed.Controlado
+                    ? "Sí"
                     : "No"
                 }
                 variant="bordered"
@@ -121,12 +121,22 @@ export default function Meds() {
                 className="w-full"
                 label="Estado"
                 value={
-                  selectedMed?.Estado
-                    ? "Activo"
-                    : selectedMed === null
+                  selectedMed == null
                     ? ""
+                    : selectedMed.Estado
+                    ? "Activo"
                     : "Inactivo"
                 }
+                variant="bordered"
+              />
+            </div>
+            <div className="flex-1 min-w-[200px]">
+              <h2 className="mb-2">Nivel de Riesgo</h2>
+              <Input
+                isReadOnly
+                className="w-full"
+                label="Nivel de Riesgo"
+                value={selectedMed?.NivelRiesgo || ""}
                 variant="bordered"
               />
             </div>
@@ -134,7 +144,12 @@ export default function Meds() {
 
           {/* Agregar */}
           <div className="p-5 self-center">
-            <Button onClick={handleAdd} className="shadow-md" color="secondary" radius="sm">
+            <Button
+              onPress={handleAdd}
+              className="shadow-md"
+              color="secondary"
+              radius="sm"
+            >
               <img src={AddIcon} alt="Agregar" />
               Agregar
             </Button>
@@ -150,6 +165,7 @@ export default function Meds() {
                 isIconOnly
                 aria-label="Imprimir"
                 className="bg-surface rounded-md"
+                onPress={() => window.print()}
               >
                 <img src={Print} alt="Imprimir" className="w-8 h-8" />
               </Button>
@@ -170,6 +186,7 @@ export default function Meds() {
                   <th className="px-6 py-4">Descripción</th>
                   <th className="px-6 py-4">Controlado</th>
                   <th className="px-6 py-4">Estado</th>
+                  <th className="px-6 py-4">Nivel de Riesgo</th>
                 </tr>
               </thead>
               <tbody>
@@ -180,13 +197,21 @@ export default function Meds() {
                     <td className="px-6 py-4">{med.TipoMedicamento}</td>
                     <td className="px-6 py-4">{med.Nombre}</td>
                     <td className="px-6 py-4">{med.Descripcion}</td>
-                    <td className="px-6 py-4">{med.Controlado ? "Sí" : "No"}</td>
-                    <td className="px-6 py-4">{med.Estado ? "Activo" : "Inactivo"}</td>
+                    <td className="px-6 py-4">
+                      {med.Controlado ? "Sí" : "No"}
+                    </td>
+                    <td className="px-6 py-4">
+                      {med.Estado ? "Activo" : "Inactivo"}
+                    </td>
+                    <td className="px-6 py-4">{med.NivelRiesgo}</td>
                   </tr>
                 ))}
                 {rows.length === 0 && (
                   <tr>
-                    <td colSpan={7} className="px-6 py-4 text-center text-gray-500">
+                    <td
+                      colSpan={8}
+                      className="px-6 py-4 text-center text-gray-500"
+                    >
                       No hay resultados aún
                     </td>
                   </tr>
