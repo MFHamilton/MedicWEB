@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { ChevronDown, ChevronUp, RefreshCcw } from "lucide-react"
+import { ChevronDown, ChevronUp, RefreshCcw, Search } from "lucide-react"
 
 export default function MonitoreoMedDropdown({
   onRefresh,
@@ -40,7 +40,7 @@ export default function MonitoreoMedDropdown({
 
   return (
     <div className="w-full bg-white p-4 rounded-lg shadow-sm flex flex-wrap items-center justify-between gap-4 mb-6">
-      {/* Dropdown + search */}
+      {/* Dropdown */}
       <div className="relative flex-1 min-w-[250px]" ref={dropdownRef}>
         <div
           className="flex items-center justify-between p-3 border rounded-md cursor-pointer bg-white"
@@ -52,7 +52,6 @@ export default function MonitoreoMedDropdown({
 
         {isOpen && (
           <div className="absolute mt-1 bg-white border rounded-md shadow-lg z-50 w-full max-h-64 overflow-y-auto">
-            {/* 🔍 Search input */}
             <input
               type="text"
               className="w-full p-2 border-b outline-none text-sm"
@@ -79,10 +78,19 @@ export default function MonitoreoMedDropdown({
         )}
       </div>
 
+      {/* Botón Buscar */}
+      <button
+        onClick={() => console.log("🔍 Buscando:", selectedOption)}
+        className="flex items-center gap-2 bg-[#070357] text-white px-4 py-2 rounded-md hover:bg-[#050245] transition text-sm"
+      >
+        <Search size={16} />
+        Buscar
+      </button>
+
       {/* Botón Actualizar */}
       <button
         onClick={onRefresh}
-        className="flex items-center gap-2 bg-[#070357] text-white px-4 py-2 rounded-md hover:bg-[#050245] transition"
+        className="flex items-center gap-2 bg-[#070357] text-white px-4 py-2 rounded-md hover:bg-[#050245] transition text-sm"
       >
         <RefreshCcw size={16} />
         Actualizar

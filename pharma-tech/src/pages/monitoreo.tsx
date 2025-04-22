@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import DefaultLayout from "@/layouts/default";
-
 import {
   PieChart,
   Pie,
@@ -14,14 +13,11 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import {
-  Filter,
-  RefreshCcw,
   CalendarDays,
   PackageCheck,
   ClipboardList,
 } from "lucide-react";
 import MonitoreoMedDropdown from "@/components/monitoreo-med-drop";
-
 
 interface Postcomercializacion {
   ID_Postcomercializacion: number;
@@ -82,19 +78,8 @@ export default function Monitoreo() {
       <div className="p-6 space-y-6">
         <h1 className="text-3xl font-bold mb-6">Panel de Monitoreo</h1>
 
-        {/* Botones */}
-       {/* Filtro y actualizar */}
-<div className="flex flex-wrap items-center gap-4 mb-6">
-  <MonitoreoMedDropdown onChange={(id) => console.log("Medicamento seleccionado:", id)} />
-  <button
-    onClick={fetchData}
-    className="flex items-center gap-2 bg-[#070357] text-white px-4 py-2 rounded-md hover:bg-[#050245] transition"
-  >
-    <RefreshCcw size={16} />
-    Actualizar
-  </button>
-</div>
-
+        {/* Dropdown + Botones */}
+        <MonitoreoMedDropdown onRefresh={fetchData} />
 
         {/* Widgets */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -109,7 +94,7 @@ export default function Monitoreo() {
 
         {/* Gráficas */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-10">
-          {/* Gráfica de pastel */}
+          {/* Pastel */}
           <div className="bg-white p-6 rounded-xl shadow-md">
             <h2 className="text-xl font-semibold mb-4">Distribución por Estado</h2>
             <ResponsiveContainer width="100%" height={250}>
@@ -138,7 +123,7 @@ export default function Monitoreo() {
             </ResponsiveContainer>
           </div>
 
-          {/* Gráfica de barras */}
+          {/* Barras */}
           <div className="bg-white p-6 rounded-xl shadow-md">
             <h2 className="text-xl font-semibold mb-4">Registros por Evento</h2>
             {eventosData.length > 0 ? (
