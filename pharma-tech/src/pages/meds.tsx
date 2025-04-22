@@ -55,115 +55,109 @@ export default function Meds(){
                         
                     </div>
 
-                    <div className="flex flex-wrap gap-4 full ml-5 mt-4 ">
-                        <div className="flex-1 min-w-[200px]">
-                            <h2 className="mb-2">ID del Medicamento</h2>
-                            <Input
+                    <div className="flex flex-wrap gap-4 mx-5 mt-4">
+                            <div className="flex-1 min-w-[200px]">
+                                <h2 className="mb-2">ID del Medicamento</h2>
+                                <Input
                                     isReadOnly
-                                    className="w-full mr-5"
+                                    className="w-full"
                                     defaultValue=""
                                     label="ID Medicamento"
                                     type="meds"
-                                    variant="bordered" 
-                            />
-
+                                    variant="bordered"
+                                />
                             </div>
-                            
+
                             <div className="flex-1 min-w-[200px]">
                                 <h2 className="mb-2">Nombre del Medicamento</h2>
                                 <Input
                                     isReadOnly
-                                    className="w-full mr-5"
+                                    className="w-full"
                                     defaultValue=""
                                     label="Nombre del Medicamento"
                                     type="meds"
                                     variant="bordered"
                                 />
-
                             </div>
 
-                            
-                    </div>
-
-                    <div className="flex flex-wrap gap-4 full ml-5 mt-4 ">
-                        <div className="flex-1 min-w-[200px]">
-                            <h2 className="mb-2">Eventos Adversos</h2>
-                            <Input
+                            <div className="flex-1 min-w-[200px]">
+                                <h2 className="mb-2">Tipo</h2>
+                                <Input
                                     isReadOnly
-                                    className="w-full mr-5"
+                                    className="w-full"
                                     defaultValue=""
-                                    label="Eventos Adversos"
+                                    label="Tipo"
                                     type="meds"
-                                    variant="bordered" 
-                            />
-
+                                    variant="bordered"
+                                />
                             </div>
-                            
+                        </div>
+
+                        {/* Fila 2 */}
+                        <div className="flex flex-wrap gap-4 mx-5 mt-4">
                             <div className="flex-1 min-w-[200px]">
                                 <h2 className="mb-2">Lote</h2>
                                 <Input
                                     isReadOnly
-                                    className="w-full mr-5"
+                                    className="w-full"
                                     defaultValue=""
                                     label="Lote"
                                     type="meds"
                                     variant="bordered"
                                 />
-
                             </div>
 
                             <div className="flex-1 min-w-[200px]">
-                            <h2 className="mb-2">Tipo</h2>
-                            <Input
-                                isReadOnly
-                                className="w-full md:w-auto mr-5"
-                                defaultValue=""
-                                label="Tipo"
-                                type="meds"
-                                variant="bordered"
-                            />
-                        </div>
-                    </div>
-
-                    <div className="flex flex-wrap gap-4 full ml-5 mt-4 ">
-                        <div className="flex-1 min-w-[200px]">
-                            <h2 className="mb-2">Estado</h2>
-                            <Input
+                                <h2 className="mb-2">Eventos Adversos</h2>
+                                <Input
                                     isReadOnly
-                                    className="w-full mr-5"
+                                    className="w-full"
+                                    defaultValue=""
+                                    label="Eventos Adversos"
+                                    type="meds"
+                                    variant="bordered"
+                                />
+                            </div>
+
+                            <div className="flex-1 min-w-[200px]">
+                                <h2 className="mb-2">Estado</h2>
+                                <Input
+                                    isReadOnly
+                                    className="w-full"
                                     defaultValue=""
                                     label="Estado"
                                     type="meds"
-                                    variant="bordered" 
-                            />
-
+                                    variant="bordered"
+                                />
                             </div>
-                            
-                            <div className="flex-1 min-w-[200px]">
+                        </div>
+
+                        {/* Fila 3 */}
+                        <div className="flex flex-wrap gap-4 mx-5 mt-4">
+                            <div className=" basis-1/3 min-w-[200px]">
                                 <h2 className="mb-2">Proveedor</h2>
                                 <Input
                                     isReadOnly
-                                    className="w-full mr-5"
+                                    className="w-full"
                                     defaultValue=""
                                     label="Proveedor"
                                     type="meds"
                                     variant="bordered"
                                 />
-
                             </div>
 
-                            <div className="flex-1 min-w-[200px]">
+                            <div className=" basis-1/3 min-w-[200px]">
                                 <h2 className="mb-2">Entidad Reguladora</h2>
                                 <Input
                                     isReadOnly
-                                    className="w-full md:w-auto mr-5"
+                                    className="w-full"
                                     defaultValue=""
                                     label="Entidad Reguladora"
                                     type="meds"
                                     variant="bordered"
                                 />
+                            </div>
                         </div>
-                    </div>
 
                     <div className="p-5 self-center">
                         <Button className="shadow-md" color="secondary" radius="sm"><img src={AddIcon} alt="Agregar"/>Agregar</Button>
