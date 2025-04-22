@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import DefaultLayout from "@/layouts/default";
-import { Input } from "@heroui/input";
-import { Button } from "@heroui/button";
 import { Eye, Edit, Download, Printer, Search } from "lucide-react";
 import FilterButtonInspecciones from "@/components/filter-inspecciones";
 
@@ -32,7 +30,6 @@ export default function Inspecciones() {
   };
 
   const fetchInspecciones = async () => {
-    // Datos de prueba (mock)
     const mockData: Inspeccion[] = [
       {
         id_inspeccion: 101,
@@ -52,19 +49,23 @@ export default function Inspecciones() {
 
   return (
     <DefaultLayout>
-      <div className="p-6">
-        <h1 className="text-3xl font-bold mb-6">Inspecciones y Auditorías</h1>
+      <h1 className="pb-8 m-20px text-texty text-3xl font-bold">
+        Inspecciones y Auditorías
+      </h1>
 
-        {/* Buscador y filtros */}
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-          <div className="flex gap-2 w-full md:w-auto">
-            <Input
-              className="w-72 rounded-sm"
+      <div className="bg-surface px-8 pb-8">
+        {/* Buscador y Filtro con estilo limpio */}
+        <div className="flex items-center gap-4 mb-6">
+          <div className="flex items-center border rounded-md px-3 py-2 bg-white shadow-sm w-72">
+            <Search size={18} className="text-gray-500 mr-2" />
+            <input
+              type="text"
               placeholder="Buscar inspector"
-              startContent={<Search size={18} />}
+              className="w-full outline-none text-sm text-gray-700"
             />
-            <FilterButtonInspecciones />
           </div>
+
+          <FilterButtonInspecciones />
         </div>
 
         {/* Tabla de Inspectores */}
@@ -89,13 +90,11 @@ export default function Inspecciones() {
                     </td>
                     <td className="px-6 py-4">{inspector.id_entidadreguladora}</td>
                     <td className="px-6 py-4">
-                      <span
-                        className={`text-xs px-3 py-1 rounded-full font-semibold shadow-sm ${
+                      <span className={`text-xs px-3 py-1 rounded-full font-semibold shadow-sm ${
                           inspector.inspec_estado
                             ? "bg-green-100 text-green-800"
                             : "bg-red-100 text-red-700"
-                        }`}
-                      >
+                        }`}>
                         {inspector.inspec_estado ? "Activo" : "Inactivo"}
                       </span>
                     </td>
@@ -133,28 +132,20 @@ export default function Inspecciones() {
               </tr>
             </thead>
             <tbody>
-              {inspecciones.length > 0 ? (
-                inspecciones.map((item, idx) => (
-                  <tr key={idx} className="border-b hover:bg-gray-50">
-                    <td className="px-6 py-4">{item.id_inspeccion}</td>
-                    <td className="px-6 py-4">{item.inspec_fecha}</td>
-                    <td className="px-6 py-4">{item.id_inspector}</td>
-                    <td className="px-6 py-4">{item.inspec_resultado}</td>
-                    <td className="px-6 py-4">
-                      <div className="flex gap-3 text-gray-500">
-                        <Printer size={18} className="cursor-pointer hover:text-indigo-600" />
-                        <Edit size={18} className="cursor-pointer hover:text-green-600" />
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={5} className="px-6 py-4 text-center text-gray-500">
-                    No hay inspecciones registradas.
+              {inspecciones.map((item, idx) => (
+                <tr key={idx} className="border-b hover:bg-gray-50">
+                  <td className="px-6 py-4">{item.id_inspeccion}</td>
+                  <td className="px-6 py-4">{item.inspec_fecha}</td>
+                  <td className="px-6 py-4">{item.id_inspector}</td>
+                  <td className="px-6 py-4">{item.inspec_resultado}</td>
+                  <td className="px-6 py-4">
+                    <div className="flex gap-3 text-gray-500">
+                      <Printer size={18} className="cursor-pointer hover:text-indigo-600" />
+                      <Edit size={18} className="cursor-pointer hover:text-green-600" />
+                    </div>
                   </td>
                 </tr>
-              )}
+              ))}
             </tbody>
           </table>
         </div>

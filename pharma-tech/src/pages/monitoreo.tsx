@@ -75,8 +75,8 @@ export default function Monitoreo() {
 
   return (
     <DefaultLayout>
-      <div className="p-6 space-y-6">
-        <h1 className="text-3xl font-bold mb-6">Panel de Monitoreo</h1>
+    <h1 className="pb-8 m-20px text-texty text-3xl font-bold">Panel de Monitoreo</h1>
+    <div className="bg-surface pb-8 m-50px">
 
         {/* Dropdown + Botones */}
         <MonitoreoMedDropdown onRefresh={fetchData} />
