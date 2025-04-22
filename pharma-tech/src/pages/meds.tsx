@@ -6,6 +6,7 @@ import DefaultLayout from "@/layouts/default";
 import DropDownSearch from "@/components/searchSelection";
 import AddIcon from "../assets/add-icon.png";
 import Print from "../assets/print-icon.png";
+import NewMedDrawer from "@/components/AddMedsDrawer";
 
 
 export default function Meds(){
@@ -157,8 +158,10 @@ export default function Meds(){
                             
                             </div>
                             <div className="p-5 self-center">
-                                <Button className="shadow-md" color="primary" radius="sm"><img src={AddIcon} alt="Agregar"/>Nuevo medicamento</Button>
+                                 <NewMedDrawer/>
                             </div>
+
+                            
                                 
                         </div>
                     

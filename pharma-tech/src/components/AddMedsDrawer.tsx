@@ -1,4 +1,10 @@
 import React from "react";
+import AddIcon from "../assets/add-icon.png";
+import DropdownProveedor from "./proveedor-dropdown";
+import DropdownMedType from "./medsType-dropdown";
+import DropdownEstado from "./estado-dropdown";
+import DropdownControl from "./control-dropdown";
+import DropdownRiesgo from "./riesgo-dropdown";
 import {
   Drawer,
   DrawerContent,
@@ -13,11 +19,11 @@ import {
 } from "@heroui/react";
 
 
-export default function App() {
+export default function NewMedDrawer() {
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
-  const [backdrop, setBackdrop] = React.useState("opaque");
+  const [backdrop, setBackdrop] = React.useState("blur");
 
-  const backdrops = ["opaque", "blur", "transparent"];
+  const backdrops = ["blur"];
 
   const handleBackdropChange = (backdrop) => {
     setBackdrop(backdrop);
@@ -30,12 +36,11 @@ export default function App() {
         {backdrops.map((backdrop) => (
           <Button
             key={backdrop}
-            className="capitalize"
-            color="primary"
-            variant="flat"
+            className="shadow-md" color="primary" radius="sm"
             onPress={() => handleBackdropChange(backdrop)}
           >
-            {backdrop}
+            <img src={AddIcon} alt="Agregar"/>
+            Nuevo Medicamento
           </Button>
         ))}
       </div>
@@ -43,38 +48,39 @@ export default function App() {
         <DrawerContent>
           {(onClose) => (
             <>
-              <DrawerHeader className="flex flex-col gap-1">Log in</DrawerHeader>
+              <DrawerHeader className="flex flex-col gap-1">Medicamento Nuevo</DrawerHeader>
               <DrawerBody>
                 <Input
-                  label="Email"
-                  placeholder="Enter your email"
+                  label="Nombre del Medicamento"
+                  radius="sm"
                   variant="bordered"
                 />
+                <DropdownProveedor/>
+                <DropdownMedType/>
                 <Input
-                  label="Password"
-                  placeholder="Enter your password"
-                  type="password"
+                  label="Descripción del Medicamento"
+                  radius="sm"
                   variant="bordered"
                 />
+                <DropdownEstado/>
+                <DropdownControl/>
+                <DropdownRiesgo/>
                 <div className="flex py-2 px-1 justify-between">
                   <Checkbox
                     classNames={{
                       label: "text-small",
                     }}
                   >
-                    Remember me
+                    Para que no se vea tan vacio
                   </Checkbox>
-                  <Link color="primary" href="#" size="sm">
-                    Forgot password?
-                  </Link>
                 </div>
               </DrawerBody>
               <DrawerFooter>
                 <Button color="danger" variant="flat" onPress={onClose}>
-                  Close
+                  Cerrar
                 </Button>
                 <Button color="primary" onPress={onClose}>
-                  Sign in
+                  Crear
                 </Button>
               </DrawerFooter>
             </>
