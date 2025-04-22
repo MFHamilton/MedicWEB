@@ -4,14 +4,25 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@heroui/button";
 import FilterButton from "./filter-button";
 
+interface RawMedicamento {
+  IdMedicamento: number;
+  Proveedor: string;
+  TipoMedicamento: string;
+  Nombre: string;
+  Descripcion: string;
+  Estado: string;
+  Controlado: string;
+  NivelRiesgo: string;
+}
+
 interface Medicamento {
   IdMedicamento: number;
   Proveedor: string;
   TipoMedicamento: string;
   Nombre: string;
-  Descripción: string;
-  Estado: boolean;
-  Controlado: boolean;
+  Descripcion: string;
+  Estado: string;
+  Controlado: string;
   NivelRiesgo: string;
 }
 
@@ -32,20 +43,28 @@ export default function DropdownMedicamento({
   // Fetch options from API when dropdown opens or searchTerm changes
   useEffect(() => {
     if (!isOpen) return;
-
     const fetchOptions = async () => {
       try {
-        const { data } = await axios.get<Medicamento[]>(
+        const { data } = await axios.get<RawMedicamento[]>(
           "http://localhost:3000/api/Meds",
           { params: { med_nombre: searchTerm } }
         );
-        setOptions(data);
+        const meds = data.map((item) => ({
+          IdMedicamento: item.IdMedicamento,
+          Proveedor: item.Proveedor,
+          TipoMedicamento: item.TipoMedicamento,
+          Nombre: item.Nombre,
+          Descripcion: item.Descripcion,
+          Estado: item.Estado,
+          Controlado: item.Controlado,
+          NivelRiesgo: item.NivelRiesgo,
+        }));
+        setOptions(meds);
       } catch (error) {
         console.error("Error fetching medicamentos:", error);
         setOptions([]);
       }
     };
-
     fetchOptions();
   }, [isOpen, searchTerm]);
 
@@ -59,11 +78,9 @@ export default function DropdownMedicamento({
         setIsOpen(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
+    return () =>
       document.removeEventListener("mousedown", handleClickOutside);
-    };
   }, []);
 
   return (
@@ -115,7 +132,7 @@ export default function DropdownMedicamento({
             className="px-6 hover:bg-indigo-700 rounded-md self-start shadow-md"
             color="primary"
             size="md"
-            onClick={() => onSearch(selectedMed)}
+            onPress={() => onSearch(selectedMed)}
           >
             Buscar
           </Button>

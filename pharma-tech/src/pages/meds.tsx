@@ -15,20 +15,17 @@ interface Medicamento {
   Descripcion: string;
   Estado: boolean;
   Controlado: boolean;
-  NivelRiesgo: string;
 }
 
 export default function Meds() {
   const [selectedMed, setSelectedMed] = useState<Medicamento | null>(null);
-  const [addedMeds, setAddedMeds] = useState<Medicamento[]>([]);
+  const [rows, setRows] = useState<Medicamento[]>([]);
 
   const handleAdd = () => {
-    if (!selectedMed) return;
-    // Evita duplicados si quieres:
-    if (addedMeds.find((m) => m.IdMedicamento === selectedMed.IdMedicamento)) {
-      return;
+    if (selectedMed) {
+      setRows(prev => [...prev, selectedMed]);
+      setSelectedMed(null); // opcional: limpiar selección tras agregar
     }
-    setAddedMeds((prev) => [...prev, selectedMed]);
   };
 
   return (
@@ -44,68 +41,100 @@ export default function Meds() {
             <DropDownSearch onSearch={setSelectedMed} />
           </div>
 
-          {/* 2) Inputs controlados */}
-          {/* Fila 1 */}
+          {/* Inputs controlados */}
           <div className="flex flex-wrap gap-4 mx-5 mt-4">
-            <InputField
-              label="ID Medicamento"
-              value={selectedMed?.IdMedicamento.toString() || ""}
-            />
-            <InputField
-              label="Proveedor"
-              value={selectedMed?.Proveedor || ""}
-            />
-            <InputField
-              label="Tipo"
-              value={selectedMed?.TipoMedicamento || ""}
-            />
+            {/* Fila 1 */}
+            <div className="flex-1 min-w-[200px]">
+              <h2 className="mb-2">ID del Medicamento</h2>
+              <Input
+                isReadOnly
+                className="w-full"
+                label="ID Medicamento"
+                value={selectedMed?.IdMedicamento.toString() || ""}
+                variant="bordered"
+              />
+            </div>
+            <div className="flex-1 min-w-[200px]">
+              <h2 className="mb-2">Proveedor</h2>
+              <Input
+                isReadOnly
+                className="w-full"
+                label="Proveedor"
+                value={selectedMed?.Proveedor || ""}
+                variant="bordered"
+              />
+            </div>
+            <div className="flex-1 min-w-[200px]">
+              <h2 className="mb-2">Tipo</h2>
+              <Input
+                isReadOnly
+                className="w-full"
+                label="Tipo"
+                value={selectedMed?.TipoMedicamento || ""}
+                variant="bordered"
+              />
+            </div>
+
+            {/* Fila 2 */}
+            <div className="flex-1 min-w-[200px]">
+              <h2 className="mb-2">Nombre</h2>
+              <Input
+                isReadOnly
+                className="w-full"
+                label="Nombre"
+                value={selectedMed?.Nombre || ""}
+                variant="bordered"
+              />
+            </div>
+            <div className="flex-1 min-w-[200px]">
+              <h2 className="mb-2">Descripción</h2>
+              <Input
+                isReadOnly
+                className="w-full"
+                label="Descripción"
+                value={selectedMed?.Descripcion || ""}
+                variant="bordered"
+              />
+            </div>
+            <div className="flex-1 min-w-[200px]">
+              <h2 className="mb-2">Controlado</h2>
+              <Input
+                isReadOnly
+                className="w-full"
+                label="Controlado"
+                value={
+                  selectedMed?.Controlado
+                    ? "Sí"
+                    : selectedMed === null
+                    ? ""
+                    : "No"
+                }
+                variant="bordered"
+              />
+            </div>
+
+            {/* Fila 3 */}
+            <div className="flex-1 min-w-[200px]">
+              <h2 className="mb-2">Estado</h2>
+              <Input
+                isReadOnly
+                className="w-full"
+                label="Estado"
+                value={
+                  selectedMed?.Estado
+                    ? "Activo"
+                    : selectedMed === null
+                    ? ""
+                    : "Inactivo"
+                }
+                variant="bordered"
+              />
+            </div>
           </div>
 
-          {/* Fila 2 */}
-          <div className="flex flex-wrap gap-4 mx-5 mt-4">
-            <InputField label="Nombre" value={selectedMed?.Nombre || ""} />
-            <InputField
-              label="Descripción"
-              value={selectedMed?.Descripcion || ""}
-            />
-            <InputField
-              label="Controlado"
-              value={
-                selectedMed == null
-                  ? ""
-                  : selectedMed.Controlado
-                  ? "Sí"
-                  : "No"
-              }
-            />
-          </div>
-
-          {/* Fila 3 */}
-          <div className="flex flex-wrap gap-4 mx-5 mt-4">
-            <InputField
-              label="Estado"
-              value={
-                selectedMed == null
-                  ? ""
-                  : selectedMed.Estado
-                  ? "Activo"
-                  : "Inactivo"
-              }
-            />
-            <InputField
-              label="Nivel de Riesgo"
-              value={selectedMed?.NivelRiesgo || ""}
-            />
-          </div>
-
-          {/* Botón Agregar */}
+          {/* Agregar */}
           <div className="p-5 self-center">
-            <Button
-              className="shadow-md"
-              color="secondary"
-              radius="sm"
-              onPress={handleAdd}
-            >
+            <Button onClick={handleAdd} className="shadow-md" color="secondary" radius="sm">
               <img src={AddIcon} alt="Agregar" />
               Agregar
             </Button>
@@ -121,11 +150,12 @@ export default function Meds() {
                 isIconOnly
                 aria-label="Imprimir"
                 className="bg-surface rounded-md"
-                onPress={() => window.print()}
               >
                 <img src={Print} alt="Imprimir" className="w-8 h-8" />
               </Button>
-              <NewMedDrawer />
+              <div className="p-5 self-center">
+                <NewMedDrawer />
+              </div>
             </div>
           </div>
 
@@ -138,35 +168,26 @@ export default function Meds() {
                   <th className="px-6 py-4">Tipo</th>
                   <th className="px-6 py-4">Nombre</th>
                   <th className="px-6 py-4">Descripción</th>
-                  <th className="px-6 py-4">Estado</th>
                   <th className="px-6 py-4">Controlado</th>
-                  <th className="px-6 py-4">Nivel Riesgo</th>
+                  <th className="px-6 py-4">Estado</th>
                 </tr>
               </thead>
               <tbody>
-                {addedMeds.map((med, i) => (
-                  <tr key={`${med.IdMedicamento}-${i}`}>
+                {rows.map(med => (
+                  <tr key={med.IdMedicamento} className="border-b">
                     <td className="px-6 py-4">{med.IdMedicamento}</td>
                     <td className="px-6 py-4">{med.Proveedor}</td>
                     <td className="px-6 py-4">{med.TipoMedicamento}</td>
                     <td className="px-6 py-4">{med.Nombre}</td>
                     <td className="px-6 py-4">{med.Descripcion}</td>
-                    <td className="px-6 py-4">
-                      {med.Estado ? "Activo" : "Inactivo"}
-                    </td>
-                    <td className="px-6 py-4">
-                      {med.Controlado ? "Sí" : "No"}
-                    </td>
-                    <td className="px-6 py-4">{med.NivelRiesgo}</td>
+                    <td className="px-6 py-4">{med.Controlado ? "Sí" : "No"}</td>
+                    <td className="px-6 py-4">{med.Estado ? "Activo" : "Inactivo"}</td>
                   </tr>
                 ))}
-                {addedMeds.length === 0 && (
+                {rows.length === 0 && (
                   <tr>
-                    <td
-                      colSpan={9}
-                      className="px-6 py-4 text-center text-gray-500"
-                    >
-                      No hay registros agregados
+                    <td colSpan={7} className="px-6 py-4 text-center text-gray-500">
+                      No hay resultados aún
                     </td>
                   </tr>
                 )}
@@ -175,28 +196,6 @@ export default function Meds() {
           </div>
         </div>
       </DefaultLayout>
-    </div>
-  );
-}
-
-// Componente auxiliar para Inputs
-function InputField({
-  label,
-  value,
-}: {
-  label: string;
-  value: string;
-}) {
-  return (
-    <div className="flex-1 min-w-[200px]">
-      <h2 className="mb-2">{label}</h2>
-      <Input
-        isReadOnly
-        className="w-full"
-        label={label}
-        value={value}
-        variant="bordered"
-      />
     </div>
   );
 }
