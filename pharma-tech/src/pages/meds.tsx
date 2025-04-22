@@ -7,9 +7,44 @@ import DropDownSearch from "@/components/searchSelection";
 import AddIcon from "../assets/add-icon.png";
 import Print from "../assets/print-icon.png";
 import NewMedDrawer from "@/components/AddMedsDrawer";
+import TablaAPI from "@/components/tablaapi";
 
+const columns = [
+    { key: "IdMedicamento",           label: "ID" },
+    { key: "Proveedor",       label: "Proveedor" },
+    { key: "TipoMedicamento",     label: "Tipo" },
+    { key: "Nombre",       label: "Nombre" },
+    { key: "Descripcion",  label: "Descripción" },
+    {
+      key: "Estado",
+      label: "Estado",
+      render: (v: any) => (v ? "Activo" : "Inactivo"),
+    },
+    {
+      key: "Controlado",
+      label: "Controlado",
+      render: (v: any) => (v ? "Sí" : "No"),
+    },
+    { key: "NivelRiesgo", label: "Nivel de Riesgo" },
+  ];
 
 export default function Meds(){
+    const transformData = (data: any[]) => {
+        return (data || []).map((item: any, idx: number) => ({
+          // React necesita un key único por fila:
+          key: item.IdMedicamento?.toString() || idx.toString(),
+          // mantenemos las propiedades originales para que TablaAPI
+          // acceda directamente con columns[i].key
+          IdMedicamento: item.IdMedicamento,
+          Proveedor:       item.Proveedor,
+          TipoMedicamento: item.TipoMedicamento,
+          Nombre:          item.Nombre,
+          Descripción:     item["Descripción"],
+          Estado:          item.Estado,
+          Controlado:      item.Controlado,
+          NivelRiesgo:     item.NivelRiesgo,
+        }));
+      };
     return(
         <div className="bg-red">
             <DefaultLayout>
@@ -144,11 +179,17 @@ export default function Meds(){
                         <Button className="shadow-md" color="secondary" radius="sm"><img src={AddIcon} alt="Agregar"/>Agregar</Button>
                     </div>
                     
-                </div>
-
+                    <div className="mt-4 px-8">
+          <TablaAPI
+            endpoint="http://localhost:3000/api/Meds    "
+            columns={columns}
+            transformData={transformData}
+          />
+        </div>
+      </div>
 
                 <div className=" mt-8">
-                    <div className=" flex justify-between items-center bg-surface pb-8 px-8">
+                    <div className=" flex justify-between items-center bg-surface px-8">
                         <h1 className="text-2xl font-bold">Resultados</h1>
                         <div className="flex items-center gap-4">
                             <div className="self-center">
@@ -164,8 +205,26 @@ export default function Meds(){
                             
                                 
                         </div>
-                    
+                        
                     </div>
+                    <div className="overflow-x-auto p-5 rounded-lg shadow-md bg-white">
+                            <table className="w-full p-5text-left text-sm">
+                                <thead className="bg-[#F9FAFB] border-b text-gray-600">
+                                <tr>
+                                    <th className="px-6 py-4">ID Medicamento</th>
+                                    <th className="px-6 py-4">Nombre Medicamento</th>
+                                    <th className="px-6 py-4">Tipo</th>
+                                    <th className="px-6 py-4">Proveedor</th>
+                                    <th className="px-6 py-4">Lote</th>
+                                    <th className="px-6 py-4">Eventos Adversos</th>
+                                    <th className="px-6 py-4">Estado</th>
+                                    <th className="px-6 py-4">Entidad Reguladora</th>
+                                    <th className="px-6 py-4">Inspector</th>
+                                    <th className="px-6 py-4">Editar</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
                     
                 </div>
 

@@ -1,23 +1,27 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import DefaultLayout from "@/layouts/default";
-import { Eye, Edit, Download, Printer, Search } from "lucide-react";
-import FilterButtonInspecciones from "@/components/filter-inspecciones";
-
-interface Inspeccion {
-  id_inspeccion: number;
-  inspec_fecha: string;
-  id_inspector: number;
-  inspec_resultado: string;
-}
+import { Input } from "@heroui/input";
+import { Button } from "@heroui/button";
+import { Eye, Edit, Download, Plus, Filter, Search } from "lucide-react";
 
 export default function Inspecciones() {
+  const [showFilterMenu, setShowFilterMenu] = useState(false);
+const [selectedEntidad, setSelectedEntidad] = useState("Todos");
+const [selectedEstado, setSelectedEstado] = useState("Todos");
+const [filteredInspectores, setFilteredInspectores] = useState([]);
+
   const [inspectores, setInspectores] = useState([]);
-  const [inspecciones, setInspecciones] = useState<Inspeccion[]>([]);
+  const [showModal, setShowModal] = useState(false);
+  const [form, setForm] = useState({
+    inspec_nombre: "",
+    inspec_apellido: "",
+    id_entidadreguladora: "",
+    inspec_estado: true,
+  });
 
   useEffect(() => {
     fetchInspectores();
-    fetchInspecciones();
   }, []);
 
   const fetchInspectores = async () => {
@@ -29,46 +33,58 @@ export default function Inspecciones() {
     }
   };
 
-  const fetchInspecciones = async () => {
-    const mockData: Inspeccion[] = [
-      {
-        id_inspeccion: 101,
-        inspec_fecha: "2024-04-01",
-        id_inspector: 1,
-        inspec_resultado: "Satisfactoria",
-      },
-      {
-        id_inspeccion: 102,
-        inspec_fecha: "2024-04-12",
-        id_inspector: 2,
-        inspec_resultado: "Pendiente",
-      },
-    ];
-    setInspecciones(mockData);
+  const handleSubmit = async () => {
+    try {
+      await axios.post("http://localhost:3000/api/Inspector", {
+        ...form,
+        id_entidadreguladora: parseInt(form.id_entidadreguladora),
+      });
+      setForm({
+        inspec_nombre: "",
+        inspec_apellido: "",
+        id_entidadreguladora: "",
+        inspec_estado: true,
+      });
+      setShowModal(false);
+      fetchInspectores();
+    } catch (error) {
+      console.error("Error al crear inspector:", error);
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
   };
 
   return (
     <DefaultLayout>
-      <h1 className="pb-8 m-20px text-texty text-3xl font-bold">
-        Inspecciones y Auditorías
-      </h1>
+      <div className="p-6">
+        <h1 className="text-3xl font-bold mb-6">Inspecciones y Auditorías</h1>
 
-      <div className="bg-surface px-8 pb-8">
-        {/* Buscador y Filtro con estilo limpio */}
-        <div className="flex items-center gap-4 mb-6">
-          <div className="flex items-center border rounded-md px-3 py-2 bg-white shadow-sm w-72">
-            <Search size={18} className="text-gray-500 mr-2" />
-            <input
-              type="text"
+        {/* Buscador y botones */}
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+          <div className="flex gap-2 w-full md:w-auto">
+            <Input
+              className=" w-72 rounded-sm"
               placeholder="Buscar inspector"
-              className="w-full outline-none text-sm text-gray-700"
+              startContent={<Search size={18} />}
             />
+            <Button className="rounded-md px-4" color="primary">
+              <Filter size={18}  color="white" />
+            </Button>
           </div>
-
-          <FilterButtonInspecciones />
+          <Button
+            className="rounded-md px-4"
+            color="primary"
+            onClick={() => setShowModal(true)}
+          >
+            <Plus size={18} className="mr-2" />
+            Añadir Inspector
+          </Button>
         </div>
 
-        {/* Tabla de Inspectores */}
+        {/* Tabla */}
         <div className="overflow-x-auto rounded-lg shadow-md bg-white">
           <table className="min-w-full text-left text-sm">
             <thead className="bg-[#F9FAFB] border-b text-gray-600">
@@ -85,16 +101,14 @@ export default function Inspecciones() {
                 inspectores.map((inspector: any, idx: number) => (
                   <tr key={idx} className="border-b hover:bg-gray-50">
                     <td className="px-6 py-4">{inspector.id_inspector}</td>
-                    <td className="px-6 py-4">
-                      {inspector.inspec_nombre} {inspector.inspec_apellido}
-                    </td>
+                    <td className="px-6 py-4">{inspector.inspec_nombre} {inspector.inspec_apellido}</td>
                     <td className="px-6 py-4">{inspector.id_entidadreguladora}</td>
                     <td className="px-6 py-4">
                       <span className={`text-xs px-3 py-1 rounded-full font-semibold shadow-sm ${
-                          inspector.inspec_estado
-                            ? "bg-green-100 text-green-800"
-                            : "bg-red-100 text-red-700"
-                        }`}>
+                        inspector.inspec_estado
+                          ? "bg-green-100 text-green-800"
+                          : "bg-red-100 text-red-700"
+                      }`}>
                         {inspector.inspec_estado ? "Activo" : "Inactivo"}
                       </span>
                     </td>
@@ -108,16 +122,11 @@ export default function Inspecciones() {
                   </tr>
                 ))
               ) : (
-                <tr>
-                  <td colSpan={5} className="px-6 py-4 text-center text-gray-500">
-                    No hay inspectores.
-                  </td>
-                </tr>
+                <tr><td colSpan={5} className="px-6 py-4 text-center text-gray-500">No hay inspectores.</td></tr>
               )}
             </tbody>
           </table>
         </div>
-
         {/* Tabla de Inspecciones */}
         <div className="overflow-x-auto rounded-lg shadow-md bg-white mt-10">
           <h2 className="text-xl font-bold px-6 pt-6">Inspecciones Registradas</h2>
@@ -153,3 +162,4 @@ export default function Inspecciones() {
     </DefaultLayout>
   );
 }
+

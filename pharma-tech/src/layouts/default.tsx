@@ -15,7 +15,7 @@ export default function DefaultLayout({ children }) {
       <aside className="w-[220px] bg-[#f8f8f8] text-gray-800 p-5 shadow-md">
         {/* Logo */}
         <div className="mb-10 flex justify-center">
-          <Link to="/">
+          <Link to="/homepage">
           <img src={logo} alt="PharmaTech" className="w-36"/>
           </Link>
         </div>
