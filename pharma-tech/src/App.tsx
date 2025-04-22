@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 
 import IndexPage from "@/pages/index";
 import DocsPage from "@/pages/docs";
@@ -8,33 +8,31 @@ import AboutPage from "@/pages/about";
 import LoginPage from "@/pages/login";
 import Proveedores from "@/pages/proveedores";
 import Inspecciones from './pages/inspecciones';
-import Monitoreo from "./pages/monitoreo"; 
 import EnsayoClinico from './pages/ensayoclinico';
+import ProtectedRoute from "@/protectedroute";
+import HomePage from "./pages/homepage";
 import Meds from "./pages/meds";
 
 
-function App() {
+export default function App() {
   return (
     <Routes>
-      <Route element={<LoginPage />} path="/login" />
-      <Route element={<IndexPage />} path="/" />
-      <Route element={<Meds />} path="/meds" />
-      <Route element={<DocsPage />} path="/docs" />
-      <Route element={<PricingPage />} path="/pricing" />
-      <Route element={<BlogPage />} path="/blog" />
-      <Route element={<AboutPage />} path="/about" />
-      <Route element={<AboutPage />} path="/about" />
-      <Route element={<EnsayoClinico />} path="/ensayoclinico" />
+      {/* pública */}
+      <Route path="/" element={<LoginPage />} />
 
-      <Route element={<LoginPage />} path="/login" />
-      <Route element={<Proveedores />} path="/proveedores" />
-
-      <Route path="/inspecciones" element={<Inspecciones />} />
-      <Route path="/monitoreo" element={<Monitoreo />} />
-
-      
+      {/* protegidas */}
+      <Route element={<ProtectedRoute />}>
+        <Route path="/homepage"              element={<HomePage />} />
+        <Route path="/meds"          element={<Meds />} />
+        <Route path="/docs"          element={<DocsPage />} />
+        <Route path="/pricing"       element={<PricingPage />} />
+        <Route path="/blog"          element={<BlogPage />} />
+        <Route path="/about"         element={<AboutPage />} />
+        <Route path="/ensayoclinico" element={<EnsayoClinico />} />
+        <Route path="/proveedores"   element={<Proveedores />} />
+        <Route path="/inspecciones"  element={<Inspecciones />} />
+      </Route>
+       <Route path="/monitoreo" element={<Monitoreo />} /> 
     </Routes>
-  );
+  )
 }
-
-export default App;

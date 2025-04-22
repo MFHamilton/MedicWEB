@@ -4,37 +4,43 @@ import { useState, useRef, useEffect } from "react"
 import { ChevronDown, ChevronUp } from "lucide-react"
 import axios from "axios"
 
-export default function DropdownProveedor() {
+interface DropdownProveedorProps {
+  onSelect?: (idProveedor: number) => void
+}
+
+export default function DropdownProveedor({ onSelect }: DropdownProveedorProps) {
   const [isOpen, setIsOpen] = useState(false)
+  const [proveedores, setProveedores] = useState<{ id: number; nombre: string }[]>([])
   const [selectedOption, setSelectedOption] = useState("")
+  const [selectedId, setSelectedId] = useState<number | null>(null)
   const [searchTerm, setSearchTerm] = useState("")
-  const [proveedores, setProveedor] = useState<string[]>([])
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    if (!isOpen) return
+
     const fetchProveedor = async () => {
       try {
-        // Reemplaza esta URL por la real de tu API
-        const response = await axios.get("https://api.example.com/proveedores")
-        // Suponiendo que la API devuelve un array de strings
-        setProveedor(response.data)
+        const response = await axios.get("http://localhost:3000/api/Provd", {
+          params: { pro_nombre: searchTerm }
+        })
+        setProveedores(
+          (response.data || []).map((p: any) => ({
+            id: Number(p.id_proveedor),
+            nombre: String(p.pro_nombre)
+          }))
+        )
       } catch (error) {
         console.error("Error al obtener proveedor:", error)
-        // Datos de ejemplo en caso de error o como placeholder
-        setProveedor([
-          "Proveedor Leanne Graham",
-          "Proveedor Ervin Howell",
-          "Proveedor Clementine Bauch",
-          "Proveedor Patricia Lebsack",
-        ])
+        setProveedores([])
       }
     }
 
     fetchProveedor()
-  }, [])
+  }, [isOpen, searchTerm])
 
   const filteredProveedor = proveedores.filter((proveedor) =>
-    proveedor.toLowerCase().includes(searchTerm.toLowerCase())
+    proveedor.nombre.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
   const handleClickOutside = (event: MouseEvent) => {
@@ -71,16 +77,18 @@ export default function DropdownProveedor() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
-              {filteredProveedor.map((proveedor, index) => (
+              {filteredProveedor.map((proveedor) => (
                 <div
-                  key={index}
+                  key={proveedor.id}
                   className="p-3 hover:bg-gray-100 cursor-pointer"
                   onClick={() => {
-                    setSelectedOption(proveedor)
+                    setSelectedOption(proveedor.nombre)
+                    setSelectedId(proveedor.id)
                     setIsOpen(false)
+                    onSelect?.(proveedor.id)
                   }}
                 >
-                  {proveedor}
+                  {proveedor.nombre}
                 </div>
               ))}
             </div>

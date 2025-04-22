@@ -55,6 +55,7 @@ export default function Inspectores() {
     }
   };
 
+
   const fetchInspecciones = async () => {
     try {
       const response = await axios.get("http://localhost:3000/api/Inspeccion");
@@ -270,3 +271,4 @@ export default function Inspectores() {
     </DefaultLayout>
   );
 }
+
