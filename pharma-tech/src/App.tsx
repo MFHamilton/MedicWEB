@@ -8,8 +8,8 @@ import AboutPage from "@/pages/about";
 import LoginPage from "@/pages/login";
 import Proveedores from "@/pages/proveedores";
 import Inspecciones from './pages/inspecciones';
-import Monitoreo from "./pages/monitoreo"; 
 import EnsayoClinico from './pages/ensayoclinico';
+
 import Meds from "./pages/meds";
 
 
@@ -30,7 +30,6 @@ function App() {
       <Route element={<Proveedores />} path="/proveedores" />
 
       <Route path="/inspecciones" element={<Inspecciones />} />
-      <Route path="/monitoreo" element={<Monitoreo />} />
     </Routes>
   );
 }
