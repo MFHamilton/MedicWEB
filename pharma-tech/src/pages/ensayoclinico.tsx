@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import DefaultLayout from "@/layouts/default";
 import TablaApi from "../components/tablaapi";
 import Createbutton from "@/components/createbuttom";
-import FilterEnsayos from "../components/filter-ensayos";
+import FilterEnsayosModal from "../components/filter-ensayos";
+import { Input } from "@heroui/react";
+import { Search } from "lucide-react";
 
-// Columnas de la tabla de Ensayo Clínico
 const columns = [
   { key: "id_ensayo", label: "ID Ensayo" },
   { key: "id_med", label: "ID Medicamento" },
@@ -18,10 +19,13 @@ const columns = [
 export default function EnsayoClinico() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({
-    ens_fase: "",
     ens_estado: "",
-    med_nombre: "",
+    ens_fase: ""
   });
+
+  const variants = ["faded"];
+  const colors = ["primary"];
+  const radius = ["sm"];
 
   const rowsTransformData = (data: any[]) => {
     return (data || [])
@@ -29,8 +33,8 @@ export default function EnsayoClinico() {
         item.ens_poblacion_objetivo?.toLowerCase().includes(searchTerm.toLowerCase())
       )
       .filter((item: any) =>
-        (filters.ens_fase ? item.ens_fase === filters.ens_fase : true) &&
-        (filters.ens_estado ? (filters.ens_estado === "Activo" ? item.ens_estado : !item.ens_estado) : true)
+        (filters.ens_estado ? (filters.ens_estado === "Activo" ? item.ens_estado : !item.ens_estado) : true) &&
+        (filters.ens_fase ? item.ens_fase === filters.ens_fase : true)
       )
       .map((item: any, index: number) => ({
         key: item.id_ensayo?.toString() || index.toString(),
@@ -58,18 +62,31 @@ export default function EnsayoClinico() {
     <DefaultLayout>
       <h1 className="pb-8 m-20px text-black text-3xl font-bold">Ensayos Clínicos</h1>
 
+      {/* Encabezado con búsqueda y botón */}
       <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
-        <div className="flex items-center gap-4">
-          <input
-            type="text"
-            placeholder="Buscar ensayos clínicos"
-            className="border border-gray-300 rounded-md px-4 py-2 w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-
-          <FilterEnsayos filters={filters} setFilters={setFilters} />
+        {/* Input de búsqueda con estilo personalizado */}
+        <div className="rounded-md w-80 flex flex-col gap-4">
+          {variants.map((variant) =>
+            colors.map((color) =>
+              radius.map((r) => (
+                <div key={`${variant}-${color}-${r}`}>
+                  <Input
+                    label="Buscar por población"
+                    type="text"
+                    variant={variant}
+                    color={color}
+                    radius={r}
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    startContent={<Search size={18} />}
+                  />
+                </div>
+              ))
+            )
+          )}
         </div>
+
+        <FilterEnsayosModal setFilters={setFilters} />
 
         <div className="ml-auto">
           <Createbutton
@@ -83,7 +100,7 @@ export default function EnsayoClinico() {
                 type: "select",
                 placeholder: "Seleccionar Fase",
                 required: true,
-                options: ["Fase I", "Fase II", "Fase III", "Fase IV"],
+                options: ["Fase I", "Fase II", "Fase III", "Fase IV"]
               },
               { name: "ens_eficacia_observada", type: "number", placeholder: "Eficacia Observada (%)", required: true },
               { name: "ens_poblacion_objetivo", type: "text", placeholder: "Población", required: true },
