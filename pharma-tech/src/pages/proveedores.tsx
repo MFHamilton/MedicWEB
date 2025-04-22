@@ -3,6 +3,7 @@ import DefaultLayout from "@/layouts/default";
 import TablaApi from "../components/tablaapi";
 import { Input } from "@heroui/input";
 import { Search } from "lucide-react";
+import NewProvDrawer from "@/components/AddProvDrawer";
 
 // Columnas de la tabla
 const columns = [
@@ -61,13 +62,9 @@ export default function Proveedores() {
         
 
         {/* Botón nuevo proveedor */}
-        <button
-          onClick={() => (window.location.href = "/proveedores/nuevo")}
-          className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition"
-        >
-          
-          Nuevo proveedor
-        </button>
+        <div>
+          <NewProvDrawer/>
+        </div>
       </div>
 
       {/* Tabla */}

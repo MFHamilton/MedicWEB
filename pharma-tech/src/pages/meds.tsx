@@ -82,22 +82,12 @@ export default function Meds(){
 
                             </div>
 
-                            <div className="flex-1 min-w-[200px]">
-                            <h2 className="mb-2">Inspector</h2>
-                            <Input
-                                isReadOnly
-                                className="w-full md:w-auto mr-5"
-                                defaultValue=""
-                                label="Inspector"
-                                type="meds"
-                                variant="bordered"
-                            />
-                        </div>
+                            
                     </div>
 
                     <div className="flex flex-wrap gap-4 full ml-5 mt-4 ">
                         <div className="flex-1 min-w-[200px]">
-                            <h2 className="mb-2">Evenntos Adversos</h2>
+                            <h2 className="mb-2">Eventos Adversos</h2>
                             <Input
                                     isReadOnly
                                     className="w-full mr-5"
