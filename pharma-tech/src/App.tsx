@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 
 import IndexPage from "@/pages/index";
 import DocsPage from "@/pages/docs";
@@ -9,29 +9,32 @@ import LoginPage from "@/pages/login";
 import Proveedores from "@/pages/proveedores";
 import Inspecciones from './pages/inspecciones';
 import EnsayoClinico from './pages/ensayoclinico';
+import ProtectedRoute from "@/protectedroute";
 
 import Meds from "./pages/meds";
 
 
-function App() {
+export default function App() {
   return (
     <Routes>
-      <Route element={<LoginPage />} path="/login" />
-      <Route element={<IndexPage />} path="/" />
-      <Route element={<Meds />} path="/meds" />
-      <Route element={<DocsPage />} path="/docs" />
-      <Route element={<PricingPage />} path="/pricing" />
-      <Route element={<BlogPage />} path="/blog" />
-      <Route element={<AboutPage />} path="/about" />
-      <Route element={<AboutPage />} path="/about" />
-      <Route element={<EnsayoClinico />} path="/ensayoclinico" />
+      {/* pública */}
+      <Route path="/login" element={<LoginPage />} />
 
-      <Route element={<LoginPage />} path="/login" />
-      <Route element={<Proveedores />} path="/proveedores" />
+      {/* protegidas */}
+      <Route element={<ProtectedRoute />}>
+        <Route path="/"              element={<IndexPage />} />
+        <Route path="/meds"          element={<Meds />} />
+        <Route path="/docs"          element={<DocsPage />} />
+        <Route path="/pricing"       element={<PricingPage />} />
+        <Route path="/blog"          element={<BlogPage />} />
+        <Route path="/about"         element={<AboutPage />} />
+        <Route path="/ensayoclinico" element={<EnsayoClinico />} />
+        <Route path="/proveedores"   element={<Proveedores />} />
+        <Route path="/inspecciones"  element={<Inspecciones />} />
+      </Route>
 
-      <Route path="/inspecciones" element={<Inspecciones />} />
+      {/* fallback */}
+      <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
-  );
+  )
 }
-
-export default App;

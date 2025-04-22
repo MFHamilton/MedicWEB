@@ -9,6 +9,7 @@ import { Search } from "lucide-react";
 const columns = [
   { key: "id_ensayo", label: "ID Ensayo" },
   { key: "id_med", label: "ID Medicamento" },
+  {key: "NombreMedicamento", label: "Medicamento"},
   { key: "ens_fase", label: "Fase" },
   { key: "ens_poblacion_objetivo", label: "Población Objetivo" },
   { key: "ens_eficacia_observada", label: "Eficacia Observada (%)" },
@@ -38,6 +39,7 @@ export default function EnsayoClinico() {
       .map((item: any, index: number) => ({
         key: item.id_ensayo?.toString() || index.toString(),
         id_ensayo: Number(item.id_ensayo),
+        NombreMedicamento: String(item.NombreMedicamento),
         id_med: Number(item.id_med),
         ens_fase: String(item.ens_fase),
         ens_poblacion_objetivo: String(item.ens_poblacion_objetivo),
