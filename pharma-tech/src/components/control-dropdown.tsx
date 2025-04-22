@@ -2,39 +2,29 @@
 
 import { useState, useRef, useEffect } from "react"
 import { ChevronDown, ChevronUp } from "lucide-react"
-import axios from "axios"
 
-export default function DropdownControl() {
+interface DropdownControlProps {
+  onSelect?: (value: number) => void
+}
+
+export default function DropdownControl({ onSelect }: DropdownControlProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const [selectedOption, setSelectedOption] = useState("")
+  const [selectedLabel, setSelectedLabel] = useState("")
   const [searchTerm, setSearchTerm] = useState("")
-  const [controles, setControl] = useState<string[]>([])
   const dropdownRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    const fetchControl = async () => {
-      try {
-        // Reemplaza esta URL por la real de tu API
-        const response = await axios.get("https://api.example.com/controles")
-        // Suponiendo que la API devuelve un array de strings
-        setControl(response.data)
-      } catch (error) {
-        console.error("Error al obtener control:", error)
-        // Datos de ejemplo en caso de error o como placeholder
-        setControl([
-          "Controlado",
-          "No Controlado",
-        ])
-      }
-    }
+  // Opciones estáticas con valor 1 para Controlado y 0 para No Controlado
+  const controles = [
+    { value: 1, label: "Controlado" },
+    { value: 0, label: "No Controlado" }
+  ]
 
-    fetchControl()
-  }, [])
-
-  const filteredControl = controles.filter((control) =>
-    control.toLowerCase().includes(searchTerm.toLowerCase())
+  // Filtrar opciones por término de búsqueda
+  const filteredControles = controles.filter(c =>
+    c.label.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
+  // Cerrar dropdown al hacer clic fuera
   const handleClickOutside = (event: MouseEvent) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
       setIsOpen(false)
@@ -43,20 +33,20 @@ export default function DropdownControl() {
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside)
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-    }
+    return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [])
 
   return (
-    <div className="relative">
+    <div className="relative" ref={dropdownRef}>
       <div className="flex-none gap-4">
-        <div className="" ref={dropdownRef}>
+        <div>
           <div
             className="flex items-center justify-between x-96 p-3 border rounded-md cursor-pointer bg-white"
-            onClick={() => setIsOpen(!isOpen)}
+            onClick={() => setIsOpen(open => !open)}
           >
-            <span className="text-default-600 text-sm">{selectedOption || "Control"}</span>
+            <span className="text-default-600 text-sm">
+              {selectedLabel || "Control"}
+            </span>
             {isOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
           </div>
 
@@ -67,18 +57,19 @@ export default function DropdownControl() {
                 className="p-2 border-b w-full"
                 placeholder="Buscar control..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={e => setSearchTerm(e.target.value)}
               />
-              {filteredControl.map((control, index) => (
+              {filteredControles.map((c, idx) => (
                 <div
-                  key={index}
+                  key={idx}
                   className="p-3 hover:bg-gray-100 cursor-pointer"
                   onClick={() => {
-                    setSelectedOption(control)
+                    setSelectedLabel(c.label)
                     setIsOpen(false)
+                    onSelect?.(c.value)
                   }}
                 >
-                  {control}
+                  {c.label}
                 </div>
               ))}
             </div>
