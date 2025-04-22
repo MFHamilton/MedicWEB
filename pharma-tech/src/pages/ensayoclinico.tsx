@@ -20,6 +20,7 @@ export default function EnsayoClinico() {
   const [filters, setFilters] = useState({
     ens_fase: "",
     ens_estado: "",
+    med_nombre: "",
   });
 
   const rowsTransformData = (data: any[]) => {
